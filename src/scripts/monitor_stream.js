@@ -3,7 +3,6 @@
  */
 
 require.config({
-    //baseUrl: "../node_modules/",
     shim: {
         'underscore': {
             exports: 'underscore'
@@ -33,15 +32,15 @@ require.config({
         "jquery": "../../node_modules/jquery/dist/jquery.min",
         "semantic": "../semantic/semantic.min",
         "dataTable": "./3rd/jquery.dataTables",
-        "fixedCol": "./3rd/dataTables.fixedColumns.min",
+        //"fixedCol": "./3rd/dataTables.fixedColumns.min",
         "underscore": "../../node_modules/underscore/underscore-min",
         "scroll": "./3rd/scroll",
         "echarts": "../../node_modules/echarts/dist/echarts.min"
     }
 });
 
-require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 'echarts', './constant', './tool'],
-    function($, semantic, dataTable, fixedCol, _, scroll, echarts, C, tool) {
+require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', './constant', './tool'],
+    function($, semantic, dataTable, _, scroll, echarts, C, tool) {
     /*
        保存每个td中的数据
        {
@@ -64,12 +63,26 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
     function monitor_table(url) {
         C.debug && (url = "./data.json"); // mock!!!!!
 
+        var reloadInterval, countDownInterval;
+
         var templateCollect = _.template($("#tpl_td_collect").html());
         var template = _.template($("#tpl_td_list").html());
 
+        // 自定义sort
+        $.fn.dataTable.ext.order['dom-error-number'] = function  ( settings, col ) {
+            return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                var dom = $(td).find('.vh-td-error-number');
+                if (dom.length > 0) {
+                    return dom[0].innerHTML * 1;
+                } else {
+                    return 0;
+                }
+            } );
+        };
+
         var $table = $("table.ui.table");
         var table = $table.DataTable({
-            "dom": "<iftlp>",
+            "dom": 'if<"vh-table-toolbar">tlp',
             "language": C.tableLocale
             ,"autoWidth": false
             ,"scrollX": true
@@ -84,7 +97,7 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
             //   leftColumns: 1
             //}
             ,"columns": [{
-                // 流ID
+                // 流ID idx: 0
                 data: "streamid",
                 render: function(data, type, row, meta) {
                     if (data)
@@ -93,11 +106,11 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "";
                 }
             }, {
-                // 流信息 todo
+                // 流信息 idx: 1  todo
                 data: "baduser.user"
 
             }, {
-                // 第三方
+                // 第三方 idx: 2
                 data: "20.log_list",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -106,7 +119,9 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // 直播助手
+                // 直播助手 idx: 3
+                orderDataType: "dom-error-number",
+                type: "numeric",
                 data: "1.log_list",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -115,7 +130,9 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // SRS接收
+                // SRS接收 idx: 4
+                orderDataType: "dom-error-number",
+                type: "numeric",
                 data: "2.log_list",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -124,7 +141,9 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // SRS分发
+                // SRS分发 idx: 5
+                orderDataType: "dom-error-number",
+                type: "numeric",
                 data: "11.log_list",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -133,7 +152,9 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // HLS切片
+                // HLS切片 idx: 6
+                orderDataType: "dom-error-number",
+                type: "numeric",
                 data: "12.log_list",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -142,7 +163,9 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // HLS同步
+                // HLS同步 idx: 7
+                orderDataType: "dom-error-number",
+                type: "numeric",
                 data: "13.log_list",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -151,7 +174,9 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // HLS回放
+                // HLS回放 idx: 8
+                orderDataType: "dom-error-number",
+                type: "numeric",
                 data: "14.log_list",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -160,7 +185,7 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // 移动
+                // 移动 idx: 9
                 data: "baduser.mobile_cdn",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -169,7 +194,7 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // Flash
+                // Flash idx: 10
                 data: "baduser.flash_cdn",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -178,20 +203,151 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         return "-";
                 }
             }, {
-                // 卡顿用户数
-                data: "baduser.user"
+                // 卡顿用户数 idx: 11
+                data: "baduser.user",
+                render: function(data, type, row, meta) {
+                    var dom = ["<a class='vh-summery-count-each vh-block' data-id='", row["streamid"], "' href='###'>", data, "</a>"];
+                    return dom.join("");
+                }
             }, {
-                // 用户总数
-                data: "alluser.user"
+                // 用户总数 idx: 12
+                data: "alluser.user",
+                render: function(data, type, row, meta) {
+                    var dom = ["<a class='vh-summery-count-each vh-block' data-id='", row["streamid"], "' href='###'>", data, "</a>"];
+                    return dom.join("");
+                }
             }]
         });
 
         table.on( 'draw', function (e) {
             monitor_table_event_list_details();
-            //monitor_table_event_collect_details();
             monitor_table_event_show_stream();
-            //$(e.currentTarget).find(".DTFC_LeftBodyLiner").css("overflow-y", "none");
+        }).on('init', function() {
+            var tpl = _.template($("#tpl_table_toolbar").html());
+            var toolbar = $(".vh-table-toolbar").eq(0);
+            toolbar.html(tpl());
+
+            // 筛选按钮
+            toolbar.find(".ui.button.vh-tb-filter").on("click", function() {
+                _filter(table);
+            });
+
+            $('.ui.dropdown').dropdown();
+
+            // 倒计时
+            var countdown = toolbar.find(".vh-auto-reload-countdown");
+
+            // 自动刷新
+            toolbar.find(".ui.checkbox").checkbox({
+                onChecked: function() {
+                    reloadInterval = setInterval(function() {
+                        table.ajax.reload();
+                    }, C.reloadInterval);
+
+                    countDownInterval = setInterval(function() {
+                        var n = countdown.html() - 1;
+                        if (n === 0) {
+                            n = C.reloadInterval / 1000;
+                        }
+                        countdown.html(n);
+                    }, 1000);
+                },
+                onUnchecked: function() {
+                    clearInterval(reloadInterval);
+                    reloadInterval = undefined;
+
+                    clearInterval(countDownInterval);
+                    countDownInterval = undefined;
+                    countdown.html(C.reloadInterval / 1000);
+                }
+            });
+
         });
+    }
+
+    /**
+     *  筛选条件
+     *  @param {object} table 控件
+      * @private
+     */
+    function _filter(table) {
+        var search = $.fn.dataTable.ext.search;
+        var filters = _getFilter();
+        if (filters) {
+            $(filters).each(function(idx, item) {
+                var col = item.col,
+                    dimension = item.dimension,
+                    oper = item.oper,
+                    val = item.val;
+
+
+                switch(col) {
+                    case 0: // 流ID
+
+                        break;
+
+                    case 4: // SRS接收
+
+                        break;
+
+                    case 11: // 卡顿用户数
+                        break;
+
+                    case 12: // 用户总数
+                        break;
+                }
+
+
+                search.push(
+                    function( settings, searchData, index, rowData, counter ) {
+                        return true;
+                    }
+                );
+            });
+        } else {
+            search.length = 0;
+        }
+
+        table.draw();
+    }
+
+    /**
+     *  解析toolbar中的筛选条件
+      * @returns {*[]} 无筛选条件  {array} 一个或多个条件
+     * @private
+     */
+    function _getFilter() {
+        var toolbar = $(".vh-table-toolbar").eq(0);
+        // 列 vh-tb-col
+        var col = toolbar.find(".ui.dropdown.vh-tb-col").dropdown("get value");
+        if (col && col.length === 0) {
+            return null;
+        }
+
+        // 维度 vh-tb-dimension
+        var dimension = toolbar.find(".ui.dropdown.vh-tb-dimension").dropdown("get value");
+        if (dimension && dimension.length === 0) {
+            return null;
+        }
+
+        // 操作 vh-tb-oper
+        var oper = toolbar.find(".ui.dropdown.vh-tb-oper").dropdown("get value");
+        if (oper && oper.length === 0) {
+            return null;
+        }
+
+        // 值 vh-tb-val
+        var val = toolbar.find(".ui.input.vh-tb-val").val().trim();
+        if (val == "") {
+            return null;
+        }
+
+        return [{
+            col: col,
+            dimension: dimension,
+            oper: oper,
+            val: val
+        }];
     }
 
     /**
@@ -299,32 +455,33 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
             var that = $(this);
             var code = that.attr("data-code"),
                 id = that.attr("data-id"),
+                host = that.attr("data-host"),
                 k = that.attr("data-k");
             var template;
             var grid = that.parents(".ui.grid");
             if (that.hasClass("history")) { // 历史
-                var url = C.url.monitor_stream_query_list_history.replace("{id}", id).replace("{k}", k).replace("{code}", code);
+                var url = C.url.monitor_stream_query_list_history.replace("{id}", id).replace("{host}", host).replace("{code}", code);
                 tool.xhr_get(url, function(data, textStatus, jqXHR) {
-                    var axis = [], nums = [];
+                    var axis = [], all = [], host = [], stream = [];
                     $.each(data, function(k, v) {
                         axis.push(k);
-                        nums.push(v);
+                        all.push(v["all"]);
+                        host.push(v["host"]);
+                        stream.push(v["stream"]);
                     });
 
-                    template = _.template($("#tpl_popup_history").html());
+                    template = _.template($("#tpl_modal_history").html());
                     var html = template({
                         errorCode: code,
-                        activeCode: "最近" + nums.length + "数据",
-                        localCode: "-",
-                        all: _.reduce(nums, function(memo, num){ return memo + num; }, 0)
+                        num: axis.length
                     });
                     grid.find(".vh-error-list-oper-box").html(html);
                     var graph = grid.find(".vh-history-graph");
-                    monitor_table_graph(graph[0], axis, nums);
+                    monitor_table_graph(graph[0], axis, all, host, stream);
                 }, null);
             } else { // 操作
-                template = _.template($("#tpl_popup_oper").html());
-                html = template({
+                template = _.template($("#tpl_modal_oper").html());
+                var html = template({
                     errorCode: code,
                     needHandle: code,
                     reason: code,
@@ -337,6 +494,9 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
         });
     }
 
+    /**
+     *  点击每个绿红td 弹出对话框
+     */
     function monitor_table_event_list_details() {
         var td = $("table.ui.table").find(".vh-error-list");
         var template = _.template($("#tpl_modal_list").html());
@@ -399,12 +559,15 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                         }
                     }
                 })
-                .modal('setting', 'transition', "fly down")
+                .modal('setting', 'transition', "browse")
                 .modal('show').modal("refresh");
         });
 
     }
 
+    /**
+     *  点击每个灰色的td中的list 弹出视频窗口
+     */
     function monitor_table_event_show_stream() {
         // more...
         $('.ui.accordion').accordion({
@@ -422,18 +585,26 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
             var type = _td.attr("data-type");
 
             var domain = that.text().split(":")[0].trim();
+            var url, hash;
 
-            var url = ["rtmp://", domain, "/vhall/", id];
+            if (domain.indexOf("rtmp") !== -1) { // rtmp
+                // 格式: rtmp://domain/vhall/id
+                hash = ["rtmp://", domain, "/vhall/", id];
+                url = './player/srs.html#' + hash.join("");
+            } else if (domain.indexOf("hls") !== -1) { // hls
+                // 格式: http://cn_domain/vhall/id/livestream.m3u8
+                // 格式: http://cc_domain/vhall/id/index.m3u8
+                var suffix = domain.startsWith("cn") ? "livestream.m3u8" : "/index.m3u8";
+                hash = ["http://", domain, "/vhall/", id, suffix];
+                url = './player/jwp.html#' + hash.join("");
+            }
 
-            // 格式: rtmp://domain/vhall/id
-            // http://cn_domain/vhall/id/livestream.m3u8
-            // http://cc_domain/vhall/id/index.m3u8
             $(".ui.modal.vh-modal-player")
                 .modal({
                     closable: true,
                     onShow: function() {
                         $('.ui.embed').embed({
-                            url: encodeURI('./player/srs.html#' + url.join(""))
+                            url: encodeURI(url)
                         });
                     },
                     onHide: function() {
@@ -444,83 +615,212 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
                 .modal('setting', 'transition', "fly down")
                 .modal('show').modal("refresh");
         });
-    }
 
-    function monitor_table_event_collect_details() {
-        var td = $("table.ui.table").find(".vh-error-collect");
-        var template = _.template($("#tpl_modal_collect").html());
-
-        td.off("click").on("click", function(e) {
+        // 汇总
+        $("table.ui.table td").off("click").on("click", ".vh-summery-count-each", function(e) {
             var that = $(e.currentTarget);
-            var selector = ".vh-modal-collect-details";
+            var _td = that.parents(".vh-error-collect");
+            if (_td.length === 0) {
+                _td = that;
+            }
+            var id = _td.attr("data-id");
+            var type = _td.attr("data-type") || "total"; // flash h5 ...
 
-            $(selector + ".ui.modal")
+            $(".ui.modal.vh-modal-summery-count")
                 .modal({
                     closable: true,
                     onShow: function() {
-                        var id = that.attr("data-id");
-                        var k = that.attr("data-k");
-                        var type = that.attr("data-type");
-                        if (id) {
-                            var data = streamData[id][k];
-                            var bad = data["baduser"][type];
-                            var all = data["alluser"][type];
-                            var arr = [];
-                            var sum = 0, total = 0;
-                            $.each(bad, function(k, v) {
-                                var o = {};
-                                o[k] = v + "/" + all[k];
-                                arr.push(o);
-                                sum += v;
-                                total += all[k];
+                        var url = C.url.monitor_stream_summery_count.replace("{id}", id);
+                        tool.xhr_get(url, function(data, textStatus, jqXHR) {
+                            var times = [], legend = [], series = [], series_quality = [];
+                            var app = [], flash = [], h5 = [],
+                                app_quality = [], flash_quality = [], h5_quality = [],
+                                each = {}, each_bad = {}, each_quality = {}, // 当不是全部时 存储各个分流的数据 如 "cnrtmplive02.e.vhall.com": 2
+                                sum = 0, sum_bad;
+                            $.each(data, function(k, v) {
+                                var key = _.keys(v)[0]; // 时间
+                                times.push(key);
+
+                                var cur = v[key]; // 当前对象 如 "14:15:16": {"alluser":{}, "baduser":{}}
+                                var alluser = cur["alluser"];
+                                var baduser = cur["baduser"];
+
+                                if (type === "total") {
+                                    $.each(alluser["mobile_cdn"], function(i, j) {
+                                        sum += j;
+                                    });
+                                    app.push(sum);
+
+                                    $.each(baduser["mobile_cdn"], function(i, j) {
+                                        sum_bad += j;
+                                    });
+
+                                    app_quality.push(_formula(sum, sum_bad));
+
+                                    sum = 0;
+                                    sum_bad = 0;
+                                    $.each(alluser["flash_cdn"], function(i, j) {
+                                        sum += j;
+                                    });
+                                    flash.push(sum);
+
+                                    $.each(baduser["flash_cdn"], function(i, j) {
+                                        sum_bad += j;
+                                    });
+
+                                    flash_quality.push(_formula(sum, sum_bad));
+
+                                    sum = 0;
+                                    sum_bad = 0;
+                                    // h5 暂时没有数据
+                                    h5.push(0);
+                                    h5_quality.push(0);
+                                } else {
+                                    $.each(alluser[type], function(i, j) {
+                                        if (!(i in each)) {
+                                            each[i] = [];
+                                        }
+                                        each[i].push(j);
+                                    });
+
+                                    $.each(baduser[type], function(i, j) {
+                                        if (!(i in each_bad)) {
+                                            each_bad[i] = [];
+                                        }
+                                        each_bad[i].push(j);
+                                    });
+                                }
+
                             });
 
-                            if (total === 0) { // 没有错误的情况
-                                $.each(all, function(k, v) {
-                                    total += v;
-                                    var o = {};
-                                    o[k] = 0 + "/" + v;
-                                    arr.push(o);
+                            if (type === "total") {
+                                legend = ["app", "flash", "h5"];
+
+                                $([app, flash, h5]).each(function(i, d) {
+                                    series.push({
+                                        name: legend[i],
+                                        type: "bar",
+                                        stack: '总量',
+                                        label: {
+                                            normal: {
+                                                show: false,
+                                                position: 'inside'
+                                            }
+                                        },
+                                        data: d
+                                    });
+                                });
+
+                                $([app_quality, flash_quality, h5_quality]).each(function(i, d) {
+                                    series_quality.push({
+                                        name: legend[i],
+                                        type: "line",
+                                        //stack: '总量',
+                                        data: d
+                                    });
+                                });
+
+                            } else {
+                                legend = _.keys(each);
+
+                                $.each(legend, function(i, o) {
+                                    series.push({
+                                        name: legend[i],
+                                        type: "bar",
+                                        stack: '总量',
+                                        label: {
+                                            normal: {
+                                                show: false,
+                                                position: 'inside'
+                                            }
+                                        },
+                                        data: each[o]
+                                    });
+                                });
+
+                                $.each(each, function(k, v) { // {"cnrtmplive02.e.vhall.com": [2, 4, 6]}
+                                    each_quality[k] = [];
+                                    $.each(v, function(i, j) { // 如: [2, 4, 6]
+                                        each_quality[k].push(_formula(j, each_bad[k][i]));
+                                    });
+                                });
+
+                                $.each(legend, function(i, o) {
+                                    series_quality.push({
+                                        name: legend[i],
+                                        type: "line",
+                                        //stack: '总量',
+                                        data: each_quality[o]
+                                    });
                                 });
                             }
 
-                            $(selector).find(".content").html(template({
-                                sum: sum,
-                                total: total,
-                                items: arr,
-                                id: id,
-                                k: k
-                            }));
-                        } else {
-                            return false; // 没有streamID 不显示列表
-                        }
+                            var template = _.template($("#tpl_modal_summery_count").html());
+                            var html = template({
+                                num: times.length
+                            });
+                            var box = $(".ui.modal.vh-modal-summery-count");
+                            box.find(".content").html(html);
+
+                            var graph = box.find(".vh-summery-count-graph-statistics");
+                            monitor_summery_count_graph_statistics(graph[0], times, legend, series);
+
+                            graph = box.find(".vh-summery-count-graph-quality");
+                            monitor_summery_count_graph_quality(graph[0], times, legend, series_quality);
+                        }, null);
+                    },
+                    onHide: function() {
+
                     }
                 })
-                .modal('setting', 'transition', "vertical flip")
+                .modal('setting', 'transition', "browse right")
                 .modal('show').modal("refresh");
         });
-
     }
 
-    function monitor_table_graph(dom, axis, num) {
+    function _formula(total, bad) {
+        var n = ((total - bad) / total * 100).toFixed(2);
+        return n < 0 ? 0 : n;
+    }
+
+    function monitor_table_graph(dom, axis, all, host, stream) {
         var myChart = echarts.init(dom);
 
         // 指定图表的配置项和数据
         var option = {
-            tooltip: {},
-            legend: {},
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['活动', '本机', '全部']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
             xAxis: {
                 type: 'category',
-                data: axis,
-                boundaryGap: true
+                boundaryGap: false,
+                data: axis
             },
             yAxis: {
+                type: 'value',
                 minInterval: 1
             },
             series: [{
-                name: '个数',
-                type: 'bar',
-                data: num
+                name: "活动",
+                type: "line",
+                data: stream
+            }, {
+                name: "本机",
+                type: "line",
+                data: host
+            }, {
+                name: "全部",
+                type: "line",
+                data: all
             }]
         };
 
@@ -528,4 +828,102 @@ require(['jquery', 'semantic', 'dataTable', 'fixedCol', 'underscore', 'scroll', 
         myChart.setOption(option);
     }
 
+
+    /**
+     * 汇总统计图
+     * @param dom
+     * @param axis
+     * @param legend
+     * @param series
+     */
+    function monitor_summery_count_graph_statistics(dom, axis, legend, series) {
+        var myChart = echarts.init(dom);
+
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type : 'shadow'
+                }
+            },
+            legend: {
+                data: legend,
+                x: 'right'
+            },
+            dataZoom: [{
+                show: true,
+                realtime: true,
+                start: 0,
+                end: 100,
+                xAxisIndex: 0
+                ,bottom: 0
+            }],
+            grid: [{
+                left: '20',
+                right: '40',
+                bottom: '50',
+                containLabel: true
+            }],
+            xAxis: [{
+                type : 'category',
+                boundaryGap : true,
+                axisLine: {onZero: true},
+                name: "时间",
+                data: axis
+            }],
+            yAxis: [{
+                name : '个数',
+                type : 'value'
+            }],
+            series: series
+        };
+
+        myChart.setOption(option);
+    }
+
+
+    function monitor_summery_count_graph_quality(dom, axis, legend, series) {
+        var myChart = echarts.init(dom);
+
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type : 'shadow'
+                }
+            },
+            legend: {
+                data: legend,
+                x: 'right'
+            },
+            dataZoom: [{
+                show: true,
+                realtime: true,
+                start: 0,
+                end: 100,
+                xAxisIndex: 0
+                ,bottom: 0
+            }],
+            grid: [{
+                left: '20',
+                right: '40',
+                bottom: '50',
+                containLabel: true
+            }],
+            xAxis: [{
+                type : 'category',
+                boundaryGap : true,
+                axisLine: {onZero: true},
+                name: "时间",
+                data: axis
+            }],
+            yAxis: [{
+                name : '百分比',
+                type : 'value'
+            }],
+            series: series
+        };
+
+        myChart.setOption(option);
+    }
 });

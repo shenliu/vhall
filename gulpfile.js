@@ -74,6 +74,10 @@ gulp.task('buildlib', function() {
     gulp.src('./src/images/*.*')
         .pipe(gulp.dest('./dist/images/'));
 
+    //--------------------------others---------------------------------
+    gulp.src('./src/player/**')
+        .pipe(gulp.dest('./dist/player/'));
+
     //--------------------------fin-----------------------------------
     del('./dist/_*.html');
 });

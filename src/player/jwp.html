@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/srs.page.js"></script>
+    <script type="text/javascript" src="js/srs.log.js"></script>
+    <script type="text/javascript" src="js/srs.player.js"></script>
+    <script type="text/javascript" src="js/srs.publisher.js"></script>
+    <script type="text/javascript" src="js/srs.utility.js"></script>
+    <style>
+
+    </style>
+    <script type="text/javascript" src="js/jwplayer.js" ></script>
+    <script type='text/javascript'>jwplayer.key = 'N8zhkmYvvRwOhz4aTGkySoEri4x+9pQwR7GHIQ=='; </script>
+    <script type="text/javascript">
+        var _player = null;
+        var _url = null;
+
+        function player_start() {
+            $("#div_container").remove();
+
+            var div_container = $("<div/>");
+            $(div_container).attr("id", "div_container");
+            $("#player").append(div_container);
+
+            var player = $("<div/>");
+            $(player).attr("id", "player_id");
+            $(div_container).append(player);
+
+            var conf = {
+                file: _url,
+                width: srs_get_player_width(),
+                height: srs_get_player_height(),
+                autostart: true,
+                analytics: { enabled: false}
+            };
+            _player = jwplayer('player_id').setup(conf);
+        }
+
+        function player_stop() {
+            $("#div_container").remove();
+            _player.stop();
+        }
+
+        $(function(){
+            _url = location.hash.slice(1);
+            $(".header").find("h5").html(_url);
+            player_start();
+        });
+    </script>
+</head>
+<body>
+<div class="container" style="width:750px;">
+    <div class="header">
+        <h5></h5>
+    </div>
+    <div class="modal-body" id="player"></div>
+    <div class="modal-footer"></div>
+</div>
+</body>
+

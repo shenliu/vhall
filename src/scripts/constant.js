@@ -3,7 +3,7 @@
  */
 define(function (){
     return {
-        debug: !1,
+        debug: false,
 
         message: {
             '12001': '开始推流',
@@ -266,8 +266,10 @@ define(function (){
         url: {
             monitor_stream: "http://123.57.180.76:4588/stream",
             monitor_stream_query_list: "http://123.57.180.76:4588/stream_mod_query?streamid={id}&mod={k}&length={len}",
-            monitor_host: "http://123.57.180.76:4588/hosts",
-            monitor_stream_query_list_history: "http://123.57.180.76:4588/stream_mod_code_query?streamid={id}&mod={k}&code={code}"
+            monitor_stream_query_list_history: "http://123.57.180.76:4588/stream_mod_code_query?streamid={id}&hostname={host}&code={code}",
+            monitor_stream_summery_count: "http://123.57.180.76:4588/stream_user_count_query?streamid={id}",
+
+            monitor_host: "http://123.57.180.76:4588/hosts"
         },
         
         level: {
@@ -275,6 +277,8 @@ define(function (){
             "4": "danger"
         },
 
-        queryNumber: 100
+        queryNumber: 100, // 查询错误列表结果个数
+
+        reloadInterval: 15000 // 表格自动刷新间隔时间
     };
 });

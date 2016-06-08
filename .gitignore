@@ -1,7 +1,7 @@
-# Created by .ignore support plugin (hsz.mobi)
-
+dist/
+node_modules/
 .idea/
-node_modules
 server.py
 src/*.html
 src/data.json
+src/css/*.css
