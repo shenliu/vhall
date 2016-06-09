@@ -165,6 +165,27 @@ define(function (){
         return out;
     }
 
+    /**
+     * 随机得到指定范围中的一个数字 包括这个范围本身
+     * @param start
+     * @param end
+     * @returns {number}
+     */
+    function random(start, end) {
+        var n = end - start + 1;
+        return Math.floor(Math.random() * n + start);
+    }
+
+    /**
+     * 去除str中的HTML标签 返回纯文本
+     * @param str HTML文本
+     * @returns {string}
+     */
+    function stripHTML(str) {
+        var reg = /<(?:.|\s)*?>/g;
+        return str.replace(reg, "");
+    }
+
     return {
         xhr_get: function(url, done, fail) {
             $.ajax({
@@ -179,6 +200,10 @@ define(function (){
                 fail && fail(jqXHR, textStatus, errorThrown);
             });
         },
+
+        stripHTML: stripHTML,
+
+        random: random,
 
         base64: {
             encode: function(value) {

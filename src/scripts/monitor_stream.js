@@ -266,49 +266,143 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
     }
 
     /**
-     *  筛选条件
+     *  toolbar筛选条件
      *  @param {object} table 控件
       * @private
      */
     function _filter(table) {
         var search = $.fn.dataTable.ext.search;
+        _default();
         var filters = _getFilter();
         if (filters) {
             $(filters).each(function(idx, item) {
-                var col = item.col,
+                var col = parseInt(item.col, 10),
                     dimension = item.dimension,
-                    oper = item.oper,
+                    oper = parseInt(item.oper, 10),
                     val = item.val;
-
+                var func;
 
                 switch(col) {
                     case 0: // 流ID
-
+                        if (dimension === "length") { // 长度
+                            switch(oper) {
+                                case 1: // <=
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        return searchData[col].length <= parseInt(val, 10);
+                                    };
+                                    break;
+                                case 2: // ==
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        return searchData[col].length == parseInt(val, 10);
+                                    };
+                                    break;
+                                case 3: // >=
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        return searchData[col].length >= parseInt(val, 10);
+                                    };
+                                    break;
+                                default:
+                                    _default();
+                            }
+                        } else if (dimension === "number") { // 大小
+                            _default();
+                        } else if (dimension === "text") { // 文本
+                            switch(oper) {
+                                case 4: // 包含
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        return searchData[col].indexOf(val) !== -1;
+                                    };
+                                    break;
+                                case 5: // 不包含
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        return searchData[col].indexOf(val) === -1;
+                                    };
+                                    break;
+                                case 1: case 2: case 3: default:
+                                    _default();
+                            }
+                        }
                         break;
 
                     case 4: // SRS接收
-
+                    case 5: // SRS分发
+                    case 6: // HLS切片
+                    case 7: // HLS同步
+                    case 8: // HLS回放
+                        if (dimension === "number") {
+                            switch(oper) {
+                                case 1: // <=
+                                case 2: // ==
+                                case 3: // >=
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        var s = searchData[col];
+                                        var reg = /<span class="vh-td-error-number">(\d+)<\/span>/;
+                                        var match = reg.exec(s);
+                                        if (match) {
+                                            return _compare(parseInt(match[1], 10), parseInt(val, 10), oper);
+                                        }
+                                        return false;
+                                    };
+                                    break;
+                                default:
+                                    _default();
+                            }
+                        } else {
+                            _default();
+                        }
                         break;
 
                     case 11: // 卡顿用户数
+                    case 12: // 用户总数
+                        if (dimension === "number") {
+                            switch(oper) {
+                                case 1: // <=
+                                case 2: // ==
+                                case 3: // >=
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        var s = searchData[col];
+                                        var v = tool.stripHTML(s);
+                                        return _compare(parseInt(v, 10), parseInt(val, 10), oper);
+                                    };
+                                    break;
+                                default:
+                                    _default();
+                                    break;
+                            }
+                        } else {
+                            _default();
+                        }
                         break;
 
-                    case 12: // 用户总数
-                        break;
+                    default:
+                        _default();
                 }
 
-
-                search.push(
-                    function( settings, searchData, index, rowData, counter ) {
-                        return true;
-                    }
-                );
+                func && search.push(func);
             });
         } else {
-            search.length = 0;
+            _default();
         }
 
         table.draw();
+
+        function _default() {
+            search.length = 0;
+        }
+
+        function _compare(n1, n2, oper) {
+            switch(oper) {
+                case 1:
+                    return n1 <= n2;
+                    break;
+                case 2:
+                    return n1 == n2;
+                    break;
+                case 3:
+                    return n1 >= n2;
+                    break;
+            }
+        }
     }
 
     /**
@@ -337,7 +431,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
         }
 
         // 值 vh-tb-val
-        var val = toolbar.find(".ui.input.vh-tb-val").val().trim();
+        var val = toolbar.find(".ui.input.vh-tb-val input").val().trim();
         if (val == "") {
             return null;
         }
@@ -451,7 +545,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
 
     function monitor_table_event() {
         // 历史 操作 点击事件
-        $(document).on("click", ".link.icon", function() {
+        $(document).on("click", ".link.icon.vh-tb-list-oper", function() {
             var that = $(this);
             var code = that.attr("data-code"),
                 id = that.attr("data-id"),
@@ -646,6 +740,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                 var baduser = cur["baduser"];
 
                                 if (type === "total") {
+                                    sum = 0;
+                                    sum_bad = 0;
                                     $.each(alluser["mobile_cdn"], function(i, j) {
                                         sum += j;
                                     });
@@ -654,7 +750,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                     $.each(baduser["mobile_cdn"], function(i, j) {
                                         sum_bad += j;
                                     });
-
                                     app_quality.push(_formula(sum, sum_bad));
 
                                     sum = 0;
@@ -667,7 +762,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                     $.each(baduser["flash_cdn"], function(i, j) {
                                         sum_bad += j;
                                     });
-
                                     flash_quality.push(_formula(sum, sum_bad));
 
                                     sum = 0;
@@ -676,6 +770,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                     h5.push(0);
                                     h5_quality.push(0);
                                 } else {
+                                    // 格式: each{"cnrtmplive02.e.vhall.com": [2, 4, 6], ...}
                                     $.each(alluser[type], function(i, j) {
                                         if (!(i in each)) {
                                             each[i] = [];
@@ -715,7 +810,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                     series_quality.push({
                                         name: legend[i],
                                         type: "line",
-                                        //stack: '总量',
                                         data: d
                                     });
                                 });
@@ -749,7 +843,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                     series_quality.push({
                                         name: legend[i],
                                         type: "line",
-                                        //stack: '总量',
                                         data: each_quality[o]
                                     });
                                 });
@@ -768,9 +861,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                             graph = box.find(".vh-summery-count-graph-quality");
                             monitor_summery_count_graph_quality(graph[0], times, legend, series_quality);
                         }, null);
-                    },
-                    onHide: function() {
-
                     }
                 })
                 .modal('setting', 'transition', "browse right")

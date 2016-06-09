@@ -159,8 +159,8 @@ block content
                             <span><%- item.code %></span>
                             <span><%- item.desc %></span>
                             <div class="vh-inline-block vh-float-right normalColor">
-                                <i class="history link icon" title="历史" data-code="<%- item.code %>" data-id="<%- id %>" data-k="<%- k %>" data-host="<%- item.hostname %>" />
-                                <i class="setting link icon" title="操作" data-code="<%- item.code %>" data-id="<%- id %>" data-k="<%- k %>" data-host="<%- item.hostname %>" />
+                                <i class="history link icon vh-tb-list-oper" title="历史" data-code="<%- item.code %>" data-id="<%- id %>" data-k="<%- k %>" data-host="<%- item.hostname %>" />
+                                <i class="setting link icon vh-tb-list-oper" title="操作" data-code="<%- item.code %>" data-id="<%- id %>" data-k="<%- k %>" data-host="<%- item.hostname %>" />
                             </div>
                         </div>
                         <div class="item">
@@ -245,6 +245,10 @@ block content
                     <div class="menu">
                         <div class="item" data-value="0">流ID</div>
                         <div class="item" data-value="4">SRS接收</div>
+                        <div class="item" data-value="5">SRS分发</div>
+                        <div class="item" data-value="6">HLS切片</div>
+                        <div class="item" data-value="7">HLS同步</div>
+                        <div class="item" data-value="8">HLS回放</div>
                         <div class="item" data-value="11">卡顿用户数</div>
                         <div class="item" data-value="12">用户总数</div>
                     </div>
