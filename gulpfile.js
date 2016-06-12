@@ -1,5 +1,7 @@
 var gulp = require('gulp');
 
+var dist_path = "D:/programme/kgb/show/static/dist/";
+
 // 引入组件
 var plugins = require('gulp-load-plugins')(),
 	del = require('del'),
@@ -9,7 +11,7 @@ var plugins = require('gulp-load-plugins')(),
 gulp.task('clean', function() {
     del('./src/*.html');
     del('./src/css/*.css');
-    del('./dist/**/');
+    del(dist_path + '*.html');
 });
 
 // step 2: jade
@@ -18,7 +20,7 @@ gulp.task("jade", function() {
         .pipe(plugins.jade({
             pretty: true
         }))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest(dist_path));
 });
 
 // step 3: 将库文件copy到指定位置
@@ -27,59 +29,59 @@ gulp.task('buildlib', function() {
     //--------------------------js--------------------------------------
 
     gulp.src('./src/scripts/3rd/*.js')
-        .pipe(gulp.dest('./dist/scripts/3rd/'));
+        .pipe(gulp.dest(dist_path + 'scripts/3rd/'));
     
     gulp.src('./src/semantic/semantic.min.js')
-        .pipe(gulp.dest('./dist/scripts/3rd/semantic/'));
+        .pipe(gulp.dest(dist_path + 'scripts/3rd/semantic/'));
 
     gulp.src('./node_modules/jquery/dist/jquery.min.js')
-        .pipe(gulp.dest('./dist/scripts/3rd/'));
+        .pipe(gulp.dest(dist_path + 'scripts/3rd/'));
 
     gulp.src('./node_modules/underscore/underscore-min.js')
-        .pipe(gulp.dest('./dist/scripts/3rd/'));
+        .pipe(gulp.dest(dist_path + 'scripts/3rd/'));
 
     gulp.src('./node_modules/echarts/dist/echarts.min.js')
-        .pipe(gulp.dest('./dist/scripts/3rd/'));
+        .pipe(gulp.dest(dist_path + 'scripts/3rd/'));
 
 
-    gulp.src('./dist/scripts/monitor_stream.js')
+    gulp.src(dist_path + 'scripts/monitor_stream.js')
         .pipe(plugins.replace('../../node_modules/jquery/dist/jquery.min', './3rd/jquery.min'))
         .pipe(plugins.replace('../semantic/semantic.min', './3rd/semantic/semantic.min'))
         .pipe(plugins.replace('../../node_modules/underscore/underscore-min', './3rd/underscore-min'))
         .pipe(plugins.replace('../../node_modules/echarts/dist/echarts.min', './3rd/echarts.min'))
-        .pipe(gulp.dest('./dist/scripts/'));
+        .pipe(gulp.dest(dist_path + 'scripts/'));
 
     //--------------------------css-------------------------------------
 
     gulp.src('./src/css/**/*')
-        .pipe(gulp.dest('./dist/css/'));
+        .pipe(gulp.dest(dist_path + 'css/'));
 
     gulp.src('./src/semantic/semantic.min.css')
-        .pipe(gulp.dest('./dist/css/3rd/semantic/'));
+        .pipe(gulp.dest(dist_path + 'css/3rd/semantic/'));
 
     gulp.src('./src/semantic/font/**')
-        .pipe(gulp.dest('./dist/css/3rd/semantic/font/'));
+        .pipe(gulp.dest(dist_path + 'css/3rd/semantic/font/'));
 
     gulp.src('./src/semantic/themes/**')
-        .pipe(gulp.dest('./dist/css/3rd/semantic/themes/'));
+        .pipe(gulp.dest(dist_path + 'css/3rd/semantic/themes/'));
 
     //--------------------------html-------------------------------------
 
-    gulp.src('./dist/monitor_stream.html')
+    gulp.src(dist_path + 'monitor_stream.html')
         .pipe(plugins.replace('semantic/semantic.min.css', 'css/3rd/semantic/semantic.min.css'))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest(dist_path));
 
     //--------------------------images-----------------------------------
 
     gulp.src('./src/images/*.*')
-        .pipe(gulp.dest('./dist/images/'));
+        .pipe(gulp.dest(dist_path + 'images/'));
 
     //--------------------------others---------------------------------
     gulp.src('./src/player/**')
-        .pipe(gulp.dest('./dist/player/'));
+        .pipe(gulp.dest(dist_path + 'player/'));
 
     //--------------------------fin-----------------------------------
-    del('./dist/_*.html');
+    del(dist_path + '_*.html');
 });
 
 // step 4: 合并，压缩js文件
@@ -87,7 +89,7 @@ gulp.task('javascripts', function() {
     var combined = combiner.obj([
         gulp.src('./src/scripts/*.js'),
         plugins.uglify(),
-        gulp.dest('./dist/scripts/')
+        gulp.dest(dist_path + 'scripts/')
     ]);
     combined.on('error', console.error.bind(console));
     return combined;

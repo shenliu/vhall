@@ -347,6 +347,23 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                 default:
                                     _default();
                             }
+                        } else if (dimension === "text") {
+                            switch(oper) {
+                                case 4: // 包含
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        var s = searchData[col];
+                                        return s.indexOf(val) !== -1;
+                                    };
+                                    break;
+                                case 5: // 不包含
+                                    func = function( settings, searchData, index, rowData, counter ) {
+                                        var s = searchData[col];
+                                        return s.indexOf(val) === -1;
+                                    };
+                                    break;
+                                default:
+                                    _default();
+                            }
                         } else {
                             _default();
                         }
