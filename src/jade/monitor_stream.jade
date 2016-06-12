@@ -1,0 +1,296 @@
+//-
+   Created by shen on 2016/5/24.
+
+extends _main
+
+block title
+    title 流媒体服务实时监控系统
+
+//- include _bootstrap
+
+//- block prepend scripts
+    +bootstrap
+
+//- 引入 模态对话框
+include _modal
+
+block css
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/jquery.dataTables.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/fixedColumns.dataTables.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/monitor.css")
+
+block content
+    div.ui.main.container.raised.segment#container.vh-container
+        h2(class="ui header vh-table")
+            i(class="dashboard icon")
+            div(class="content") 流状态监控
+
+        table.ui.table.striped.celled.display.nowrap.compact.dataTable(cellspacing='0', width='100%')
+            thead
+                tr
+                    th 流ID
+                    th 流信息
+                    th 第三方
+                    th 直播助手
+                    th SRS接收
+                    th SRS分发
+                    th HLS切片
+                    th HLS同步
+                    th HLS回放
+                    th 移动
+                    th Flash
+                    th 卡顿用户数
+                    th 用户总数
+            tfoot
+                tr
+                    th 流ID
+                    th 流信息
+                    th 第三方
+                    th 直播助手
+                    th SRS接收
+                    th SRS分发
+                    th HLS切片
+                    th HLS同步
+                    th HLS回放
+                    th 移动
+                    th Flash
+                    th 卡顿用户数
+                    th 用户总数
+            tbody
+
+        div.vh-table-toolbar
+
+        +modal('vh-modal-list-details fullscreen', '错误列表', true, false, true)
+            include _tpl_monitor_list_details
+
+        +modal('vh-modal-summery-count fullscreen long', '统计图', true, false, true)
+
+        +modal('vh-modal-player large', '播放', true, false, true)
+            include _player
+
+    script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_stream")
+
+    //- 每个td的list模版
+    script(type="text/template" id="tpl_td_list").
+        <div class="vh-error-list" data-id="<%- id %>" data-k="<%- k %>">
+            <div class="ui list">
+                <div class="item <%= row1.bg %>-bg">
+                    <div class="header"><%- row1.code %> <%- row1.desc %></div>
+                    <%- row1.date %>
+                </div>
+            </div>
+
+            <div class="ui list">
+                <% if (row2) { %>
+                <div class="item <%= row2.bg %>-bg">
+                    <div class="header"><%- row2.code %> <%- row2.desc %></div>
+                    <%- row2.date %>
+                </div>
+                <% } else { %>
+                <div class="item none-bg">
+                    <div class="header">-</div>
+                </div>
+                <% } %>
+
+                <% if (row3) { %>
+                <div class="item <%= row3.bg %>-bg">
+                    <div class="header"><%- row3.code %> <%- row3.desc %></div>
+                    <%- row3.date %>
+                </div>
+                <% } else { %>
+                    <div class="item none-bg">
+                    <div class="header">-</div>
+                </div>
+                <% } %>
+            </div>
+
+            <div class="ui list">
+                <div class="item vh-align-center">
+                    <span style="color:#666;">最近错误数据 <span class="vh-td-error-number"><%- errorNum %></span> 条</span>
+                </div>
+            </div>
+        </div>
+
+
+    //- 每个td的collect模版
+    script(type="text/template" id="tpl_td_collect").
+        <div class="vh-error-collect" data-id="<%- id %>" data-k="<%- k %>" data-type="<%- type %>">
+            <h5 class="ui header"><a class="vh-summery-count-each" href="###">汇总: <%- sum %>/<%- total %></a></h5>
+            <div class="ui list">
+            <% _.each(items, function(item, idx) { %>
+                <div class="item">
+                    <div class="ui label">
+                        <%- _.keys(item)[0] %>:
+                        <div class="detail"><%- _.values(item)[0] %></div>
+                    </div>
+                </div>
+            <% }); %>
+
+            <% if (more) { %>
+            <div class="ui accordion">
+                <div class="title vh-more">more...</div>
+                <div class="content">
+                <% _.each(itemsRest, function(item, idx) { %>
+                    <div class="item">
+                        <div class="ui label">
+                            <%- _.keys(item)[0] %>:
+                            <div class="detail"><%- _.values(item)[0] %></div>
+                        </div>
+                    </div>
+                <% }); %>
+                </div>
+            </div>
+            <% } %>
+            </div>
+        </div>
+
+
+    //- modal的list模版
+    script(type="text/template" id="tpl_modal_list").
+        <% _.each(items, function(item, idx) { %>
+            <div class="item">
+                <div class="content" style="width:100%;">
+                    <div class="ui list">
+                        <div class="item <%= item.bg %>">
+                            <span><%- idx + 1 %>.</span>
+                            <span>code:</span>
+                            <span><%- item.code %></span>
+                            <span><%- item.desc %></span>
+                            <div class="vh-inline-block vh-float-right normalColor">
+                                <i class="history link icon vh-tb-list-oper" title="历史" data-code="<%- item.code %>" data-id="<%- id %>" data-k="<%- k %>" data-host="<%- item.hostname %>" />
+                                <i class="setting link icon vh-tb-list-oper" title="操作" data-code="<%- item.code %>" data-id="<%- id %>" data-k="<%- k %>" data-host="<%- item.hostname %>" />
+                            </div>
+                        </div>
+                        <div class="item">
+                            <span>p:</span>
+                            <span><%- id %></span>
+                        </div>
+                        <div class="item">
+                            <div>自定义:</div>
+                            <div class="list">
+                            <% _.mapObject(item.attr, function(val, key) { %>
+                                <div class="item vh-long-span">
+                                    <span><%- key %>:</span>
+                                    <span><%- val %></span>
+                                </div>
+                            <% }); %>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <span>时间:</span>
+                            <span><%- item.date %></span>
+                        </div>
+                        <div class="item">
+                            <span>主机:</span>
+                            <span><%- item.hostname || "-"  %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+
+    //- modal的history模版
+    script(type="text/template" id="tpl_modal_history").
+        <div class="ui list vh-history">
+            <div class="item">
+                <span>错误编号:</span>
+                <span><%- errorCode %></span>
+            </div>
+            <div class="item">
+                <div>最近<%- num %>天:</div>
+                <div class="vh-history-graph"></div>
+            </div>
+        </div>
+
+    //- modal的oper模版
+    script(type="text/template" id="tpl_modal_oper").
+        <div class="ui list vh-history">
+            <div class="item">
+                <span>错误编号:</span>
+                <span><%- errorCode %></span>
+            </div>
+            <div class="item">
+                <span>是否需要处理:</span>
+                <span><%- needHandle %></span>
+            </div>
+            <div class="item">
+                <div>详细说明及原因:</div>
+                <div><%- reason %></div>
+            </div>
+            <div class="item">
+                <div>处理方法:</div>
+                <div><%- method %></div>
+            </div>
+        </div>
+
+    //- modal的count模版
+    script(type="text/template" id="tpl_modal_summery_count").
+        <div class="ui container">
+            <h4 class="ui header">最近<%- num %>分钟统计</h4>
+            <div class="vh-summery-count-graph-statistics"></div>
+            <h4 class="ui header">分类质量</h4>
+            <div class="vh-summery-count-graph-quality"></div>
+        </div>
+
+    script(type="text/template" id="tpl_table_toolbar").
+        <div class="ui menu vh-relative" style="z-index: 200;">
+            <span class="item">筛选: </span>
+            <div class="item">
+                <div class="ui selection dropdown vh-tb-col">
+                    <input type="hidden" name="tb_col">
+                    <i class="dropdown icon" />
+                    <div class="default text">列</div>
+                    <div class="menu">
+                        <div class="item" data-value="0">流ID</div>
+                        <div class="item" data-value="4">SRS接收</div>
+                        <div class="item" data-value="5">SRS分发</div>
+                        <div class="item" data-value="6">HLS切片</div>
+                        <div class="item" data-value="7">HLS同步</div>
+                        <div class="item" data-value="8">HLS回放</div>
+                        <div class="item" data-value="11">卡顿用户数</div>
+                        <div class="item" data-value="12">用户总数</div>
+                    </div>
+                </div>
+
+                <div class="ui selection dropdown vh-tb-dimension">
+                    <input type="hidden" name="tb_dimension">
+                    <i class="dropdown icon" />
+                    <div class="default text">维度</div>
+                    <div class="menu">
+                        <div class="item" data-value="length">长度</div>
+                        <div class="item" data-value="number">大小</div>
+                        <div class="item" data-value="text">文本</div>
+                    </div>
+                </div>
+
+                <div class="ui selection dropdown vh-tb-oper">
+                    <input type="hidden" name="tb_oper">
+                    <i class="dropdown icon" />
+                    <div class="default text">操作</div>
+                    <div class="menu">
+                        <div class="item" data-value="1"><=</div>
+                        <div class="item" data-value="2">==</div>
+                        <div class="item" data-value="3">>=</div>
+                        <div class="item" data-value="4">包含</div>
+                        <div class="item" data-value="5">不包含</div>
+                    </div>
+                </div>
+
+                <div class="ui input vh-tb-val">
+                    <input type="text" placeholder="值...">
+                </div>
+
+                <button class="ui button blue vh-tb-filter">筛选</button>
+
+            </div>
+            <div class="right menu">
+                <div class="item">
+                    <div class="ui slider checkbox">
+                        <input type="checkbox" />
+                        <label>自动刷新<span class="vh-auto-reload-countdown">15</span>秒</label>
+                    </div>
+                </div>
+            </div>
+        </div>

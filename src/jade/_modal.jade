@@ -1,0 +1,32 @@
+//-
+    Created by shen on 2016/6/1.
+    模态对话框
+
+//-
+    clazz: 类名
+    header: 是否有header 如有则加入
+    block: 内容 不用传入到mixin中
+    hasClose: 右上是否有关闭按钮
+    hasImg: 内容里是否有图片
+    hasItem: 底部是否有按钮
+    items: 确定 取消等按钮的文本
+        如: 确定|positive  取消|deny
+mixin modal(clazz, header, hasClose, hasImg, hasItem, ...items)
+    div(class="ui modal long " + clazz)
+        if hasClose
+            i.close.icon
+        if header
+            div.header= header
+        if hasImg
+            div.image.content
+                block
+        else
+            div.content
+                block
+        if hasItem
+            div.actions
+                each item in items
+                    - var arr = item.split("|")
+                    - var stylez = arr[1]
+                    - var name = arr[0]
+                    div.ui.button(class=stylez)= name

@@ -1,0 +1,175 @@
+@import "var";
+
+.vh-container {
+  width: 100%!important;
+}
+
+.normalColor {
+  color: #333;
+}
+
+.success {
+  color: @success;
+}
+
+.success-bg {
+  background-color: @success-bg;
+  color: @success;
+  .header {
+    color: @success!important;
+  }
+
+  &:hover {
+    background-color: darken(@success-bg, 10%);
+  }
+
+}
+
+.danger {
+  color: @danger;
+}
+
+.danger-bg {
+  background-color: @danger-bg;
+  color: @danger;
+  .header {
+    color: @danger!important;
+  }
+
+  &:hover {
+    background-color: darken(@danger-bg, 10%);
+  }
+}
+
+.current-bg, .vh-error-list-oper-box:not(:empty) {
+  background-color: #f5f5f5!important;
+}
+
+.vh-table-toolbar {
+  .ui.menu {
+    width: 1000px;
+    transform: translate(20%, -5px);
+    .item {
+      padding: 3px 5px;
+      .ui.selection, .ui.input {
+        margin-right: 5px;
+      }
+
+      &:before {
+        width: 0;
+      }
+
+    }
+    .right.menu .item:before {
+      width: 1px;
+    }
+  }
+}
+
+.vh-tb-val, .vh-tb-filter {
+  height: 32.84px;
+}
+
+.vh-tb-filter {
+  width: 130px;
+}
+
+.vh-auto-reload {
+  float: right;
+  margin-right: 25px;
+  line-height: 30px;
+}
+
+/** 单元格td **/
+.vh-error-list, .vh-error-collect .ui.label {
+  cursor: pointer;
+  margin-top: 0!important;
+  margin-bottom: 0!important;
+}
+
+/** modal中左侧错误列表 **/
+.vh-error-list-box {
+  overflow: hidden;
+
+}
+
+.ui.list {
+  margin-bottom: 0.5em!important;
+}
+
+.column {
+  padding: 0;
+}
+
+.vh-history {
+  padding: .5em!important;
+  .item {
+    margin-top: 3px;
+  }
+}
+
+.vh-history-graph {
+  width: 100%;
+  height: 500px;
+}
+
+.vh-long-span span {
+  display: inline-block;
+  vertical-align: top;
+  word-wrap: break-word;
+}
+
+.vh-long-span span:last-child {
+  width: 90%;
+}
+
+.vh-should-view {
+  background-color: #fefefe;
+}
+
+.vh-summery-count-graph-statistics, .vh-summery-count-graph-quality {
+  width: 100%;
+  height: 400px;
+}
+
+.vh-modal-summery-count {
+  height: 1000px;
+}
+
+/******* empty ***********/
+.vh-td-error-number {} /** 每个td最下方 最近错误数据n条 **/
+.vh-auto-reload-countdown {} /** 自动刷新countdown **/
+
+/** toolbar **/
+.vh-tb-col, .vh-tb-dimension, .vh-tb-oper, .vh-tb-val, .vh-tb-filter {}
+
+.vh-tb-list-oper {} /** 历史 操作 icon **/
+
+/******* override *********/
+button, input, optgroup, select, textarea, option {
+  font-size: 1rem;
+}
+
+.vh-error-list .header {
+  font-weight: normal!important;
+}
+
+.six.wide.column {
+  height: 550px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.ui.accordion .content.active .item {
+  padding: .21428571em 0;
+}
+
+.dataTables_scroll {
+  overflow-x: auto;
+}
+
+@media only screen and (min-width: 1200px) {
+  .ui.container {
+    width: 100%;
+  }
+}
