@@ -55,7 +55,9 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                     data: v
                 });
             });
-            var legend = _.keys(_datas);
+            var legend = _.map(_.keys(_datas), function(i) {
+                return C.modules[i];
+            });
             var dom = $(".vh-error-stat-overview")[0];
             var axis = _.keys(errorStatData);
 
@@ -73,7 +75,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             },
             legend: {
                 data: legend,
-                x: 'right'
+                x: "right"
             },
             grid: [{
                 left: '20',
@@ -115,10 +117,11 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 var name = C.modules[k];
                 var legend = [], vals = [], series = [];
                 $.each(v, function(i, j) { // i: "1"  j: {14002: 29, ...}
-                    legend.push(C.message[i]);
+                    var _s = i + " " + C.message[i];
+                    legend.push(_s);
                     vals.push({
                         value: j,
-                        name: C.message[i]
+                        name: _s
                     });
                     series.push({
                         name: name,
@@ -137,10 +140,11 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
 
                 });
 
+                $(".vh-error-stat-header").html(time + "数据");
+
                 var dom = $('.vh-error-stat-modules-' + k)[0];
                 var instance = E.getInstanceByDom(dom);
                 if (instance) {
-                    console.log(instance, k);
                     instance.dispose();
                 }
                 monitor_error_modules_graph(dom, legend, series);
@@ -164,6 +168,15 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             series: series
         };
         myChart.setOption(option);
+
+        monitor_error_modules_event(myChart);
+    }
+
+    function monitor_error_modules_event(myChart) {
+        myChart.on("click", function(params) {
+            var name = params.name;
+            var code = name.split(" ")[0];
+        });
     }
 
 });
