@@ -1,0 +1,1 @@
+del D:\programme\kgb\show\static\dist\_*.html

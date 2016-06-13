@@ -40,7 +40,7 @@ require.config({
 });
 
 require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', './constant', './tool'],
-    function($, semantic, dataTable, _, scroll, echarts, C, tool) {
+    function($, semantic, dataTable, _, scroll, E, C, T) {
     /*
        保存每个td中的数据
        {
@@ -378,7 +378,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                 case 3: // >=
                                     func = function( settings, searchData, index, rowData, counter ) {
                                         var s = searchData[col];
-                                        var v = tool.stripHTML(s);
+                                        var v = T.stripHTML(s);
                                         return _compare(parseInt(v, 10), parseInt(val, 10), oper);
                                     };
                                     break;
@@ -572,7 +572,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             var grid = that.parents(".ui.grid");
             if (that.hasClass("history")) { // 历史
                 var url = C.url.monitor_stream_query_list_history.replace("{id}", id).replace("{host}", host).replace("{code}", code);
-                tool.xhr_get(url, function(data, textStatus, jqXHR) {
+                T.xhr_get(url, function(data, textStatus, jqXHR) {
                     var axis = [], all = [], host = [], stream = [];
                     $.each(data, function(k, v) {
                         axis.push(k);
@@ -625,11 +625,11 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         var n = C.queryNumber + "";
                         if (id) {
                             var url = C.url.monitor_stream_query_list.replace("{id}", id).replace("{k}", k).replace("{len}", n);
-                            tool.xhr_get(url, function(data, textStatus, jqXHR) {
+                            T.xhr_get(url, function(data, textStatus, jqXHR) {
                                 $.each(data, function(idx, obj) {
                                     // parse base64
                                     //if ("_m" in obj["attr"]) {
-                                        //obj["attr"]["_m"] = tool.base64.decode(obj["attr"]["_m"]);
+                                        //obj["attr"]["_m"] = T.base64.decode(obj["attr"]["_m"]);
                                     //}
 
                                     data[idx]["desc"] = C.message[obj.code]; // 记录描述文字
@@ -742,7 +742,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                     closable: true,
                     onShow: function() {
                         var url = C.url.monitor_stream_summery_count.replace("{id}", id);
-                        tool.xhr_get(url, function(data, textStatus, jqXHR) {
+                        T.xhr_get(url, function(data, textStatus, jqXHR) {
                             var times = [], legend = [], series = [], series_quality = [];
                             var app = [], flash = [], h5 = [],
                                 app_quality = [], flash_quality = [], h5_quality = [],
@@ -795,11 +795,11 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                         each[i].push(j);
                                     });
 
-                                    $.each(baduser[type], function(i, j) {
+                                    $.each(alluser[type], function(i, j) {
                                         if (!(i in each_bad)) {
                                             each_bad[i] = [];
                                         }
-                                        each_bad[i].push(j);
+                                        each_bad[i].push(baduser[type][i] || 0);
                                     });
                                 }
 
@@ -852,7 +852,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                 $.each(each, function(k, v) { // {"cnrtmplive02.e.vhall.com": [2, 4, 6]}
                                     each_quality[k] = [];
                                     $.each(v, function(i, j) { // 如: [2, 4, 6]
-                                        each_quality[k].push(_formula(j, each_bad[k][i]));
+                                        each_bad[k] && each_quality[k].push(_formula(j, each_bad[k][i]));
                                     });
                                 });
 
@@ -886,12 +886,15 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
     }
 
     function _formula(total, bad) {
+        if (total === bad) {
+            return 0;
+        }
         var n = ((total - bad) / total * 100).toFixed(2);
         return n < 0 ? 0 : n;
     }
 
     function monitor_table_graph(dom, axis, all, host, stream) {
-        var myChart = echarts.init(dom);
+        var myChart = E.init(dom);
 
         // 指定图表的配置项和数据
         var option = {
@@ -944,7 +947,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
      * @param series
      */
     function monitor_summery_count_graph_statistics(dom, axis, legend, series) {
-        var myChart = echarts.init(dom);
+        var myChart = E.init(dom);
 
         var option = {
             tooltip: {
@@ -976,6 +979,9 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 boundaryGap : true,
                 axisLine: {onZero: true},
                 name: "时间",
+                axisLabel: {
+                    rotate: -30
+                },
                 data: axis
             }],
             yAxis: [{
@@ -990,7 +996,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
 
 
     function monitor_summery_count_graph_quality(dom, axis, legend, series) {
-        var myChart = echarts.init(dom);
+        var myChart = E.init(dom);
 
         var option = {
             tooltip: {
@@ -1022,6 +1028,9 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 boundaryGap : true,
                 axisLine: {onZero: true},
                 name: "时间",
+                axisLabel: {
+                    rotate: -30
+                },
                 data: axis
             }],
             yAxis: [{

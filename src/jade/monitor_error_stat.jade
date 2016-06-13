@@ -1,0 +1,38 @@
+//
+   Created by shen on 2016/6/12.
+
+extends _main
+
+block title
+    title 流媒体服务实时监控系统 - 错误统计
+
+block css
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/monitor.css")
+
+block content
+    div.ui.main.container.raised.segment#container.vh-container
+        h2(class="ui header")
+            i(class="bar chart icon")
+            div(class="content") 错误统计
+
+        div.ui.vertically.divided.grid
+            div.one.column.row
+                div.column
+                    div.vh-error-stat-overview
+
+            div.seven.column.row
+                div.row
+                    div.column
+                    div.column
+                    div.column
+                    div.column
+                    div.column
+                    div.column
+                    div.column
+
+            div.one.column.row
+                div.column
+
+    script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_error_stat")

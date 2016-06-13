@@ -1,7 +1,9 @@
 /**
  * Created by shen on 2016/5/25.
  */
-define(function (){
+define(function () {
+    var host = "http://123.57.180.76:4588/";
+
     return {
         debug: false,
 
@@ -264,12 +266,14 @@ define(function (){
         },
 
         url: {
-            monitor_stream: "http://123.57.180.76:4588/stream",
-            monitor_stream_query_list: "http://123.57.180.76:4588/stream_mod_query?streamid={id}&mod={k}&length={len}",
-            monitor_stream_query_list_history: "http://123.57.180.76:4588/stream_mod_code_query?streamid={id}&hostname={host}&code={code}",
-            monitor_stream_summery_count: "http://123.57.180.76:4588/stream_user_count_query?streamid={id}",
+            monitor_stream: host + "stream",
+            monitor_stream_query_list: host + "stream_mod_query?streamid={id}&mod={k}&length={len}",
+            monitor_stream_query_list_history: host + "stream_mod_code_query?streamid={id}&hostname={host}&code={code}",
+            monitor_stream_summery_count: host + "stream_user_count_query?streamid={id}",
 
-            monitor_host: "http://123.57.180.76:4588/hosts"
+            monitor_host: host + "hosts",
+
+            monitor_error_stat_overview: host + "stream_error_count_query"
         },
         
         level: {
@@ -280,5 +284,15 @@ define(function (){
         queryNumber: 100, // 查询错误列表结果个数
 
         reloadInterval: 15000 // 表格自动刷新间隔时间
+
+        ,modules: {
+            "20": "第三方",
+            "1": "助手",
+            "2": "srs",
+            "11": "srs分发",
+            "12": "切片",
+            "13": "同步",
+            "14": "回放"
+        }
     };
 });

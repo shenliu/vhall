@@ -5,3 +5,4 @@ server.py
 src/*.html
 src/data.json
 src/css/*.css
+del.bat
