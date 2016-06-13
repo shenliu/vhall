@@ -87,6 +87,9 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 boundaryGap : true,
                 axisLine: {onZero: true},
                 name: "时间",
+                axisLabel: {
+                    rotate: -30
+                },
                 data: axis
             }],
             yAxis: [{

@@ -748,6 +748,35 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                 app_quality = [], flash_quality = [], h5_quality = [],
                                 each = {}, each_bad = {}, each_quality = {}, // 当不是全部时 存储各个分流的数据 如 "cnrtmplive02.e.vhall.com": 2
                                 sum = 0, sum_bad;
+
+                            var mobile_cdn = [],
+                                flash_cdn = [],
+                                h5_cdn = [];
+
+                            // 取得所有分类的名称
+                            $.each(data, function(k, v) {
+                                var key = _.keys(v)[0]; // 时间
+                                var cur = v[key]["alluser"];
+
+                                $.each(cur["mobile_cdn"], function(i, j) {
+                                    if (_.indexOf(mobile_cdn, i) === -1) {
+                                        mobile_cdn.push(i);
+                                    }
+                                });
+
+                                $.each(cur["flash_cdn"], function(i, j) {
+                                    if (_.indexOf(flash_cdn, i) === -1) {
+                                        flash_cdn.push(i);
+                                    }
+                                });
+
+                                $.each(cur["h5_cdn"], function(i, j) {
+                                    if (_.indexOf(h5_cdn, i) === -1) {
+                                        h5_cdn.push(i);
+                                    }
+                                });
+                            });
+
                             $.each(data, function(k, v) {
                                 var key = _.keys(v)[0]; // 时间
                                 times.push(key);
@@ -788,18 +817,27 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                     h5_quality.push(0);
                                 } else {
                                     // 格式: each{"cnrtmplive02.e.vhall.com": [2, 4, 6], ...}
-                                    $.each(alluser[type], function(i, j) {
-                                        if (!(i in each)) {
-                                            each[i] = [];
+                                    var obj;
+                                    if (type === "mobile_cdn") {
+                                        obj = mobile_cdn;
+                                    } else if (type === "flash_cdn") {
+                                        obj = flash_cdn;
+                                    } else if (type === "h5_cdn") {
+                                        obj = h5_cdn;
+                                    }
+                                    $.each(obj, function(i, elem) {
+                                        if (!(elem in each)) {
+                                            each[elem] = [];
                                         }
-                                        each[i].push(j);
+
+                                        each[elem].push(alluser[type][elem] || 0);
                                     });
 
-                                    $.each(alluser[type], function(i, j) {
-                                        if (!(i in each_bad)) {
-                                            each_bad[i] = [];
+                                    $.each(obj, function(i, elem) {
+                                        if (!(elem in each_bad)) {
+                                            each_bad[elem] = [];
                                         }
-                                        each_bad[i].push(baduser[type][i] || 0);
+                                        each_bad[elem].push(baduser[type][elem] || 0);
                                     });
                                 }
 
@@ -1035,6 +1073,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             }],
             yAxis: [{
                 name : '百分比',
+                //max: 110,
                 type : 'value'
             }],
             series: series
