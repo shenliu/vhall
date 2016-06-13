@@ -45,24 +45,23 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                         _datas[x].push(sum);
                     });
                 });
-
-                var series = [], legend = [];
-                $.each(_datas, function(k, v) {
-                    legend.push(C.modules[k]);
-                    series.push({
-                        name: C.modules[k],
-                        type: "bar",
-                        stack: '总量',
-                        data: v
-                    });
-                });
-                
-                var dom = $(".vh-error-stat-overview")[0];
-                var axis = _.keys(errorStatData);
-
-                monitor_error_overview_graph(dom, axis, legend, series);
             });
+            var series = [];
+            $.each(_datas, function(k, v) {
+                series.push({
+                    name: C.modules[k],
+                    type: "bar",
+                    stack: '总量',
+                    data: v
+                });
+            });
+            var legend = _.keys(_datas);
+            var dom = $(".vh-error-stat-overview")[0];
+            var axis = _.keys(errorStatData);
+
+            monitor_error_overview_graph(dom, axis, legend, series);
         }, null);
+
     }
 
     function monitor_error_overview_graph(dom, axis, legend, series) {
@@ -100,5 +99,71 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
         };
 
         myChart.setOption(option);
+
+        monitor_error_overview_event(myChart);
     }
+
+    /**
+     * 总览图 点击事件
+     * @param myChart
+     */
+    function monitor_error_overview_event(myChart) {
+        myChart.on("click", function(params) {
+            var time = params.name;
+            var data = errorStatData[time];
+            $.each(data, function(k, v) { // {1: {14002: 29, ...}, 2: Object, 11: Object, 12: Object, 13: Object, 14: Object, 20: Object}
+                var name = C.modules[k];
+                var legend = [], vals = [], series = [];
+                $.each(v, function(i, j) { // i: "1"  j: {14002: 29, ...}
+                    legend.push(C.message[i]);
+                    vals.push({
+                        value: j,
+                        name: C.message[i]
+                    });
+                    series.push({
+                        name: name,
+                        type: 'pie',
+                        radius : '50%',
+                        center: ['50%', '75%'],
+                        data: vals,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    });
+
+                });
+
+                var dom = $('.vh-error-stat-modules-' + k)[0];
+                var instance = E.getInstanceByDom(dom);
+                if (instance) {
+                    console.log(instance, k);
+                    instance.dispose();
+                }
+                monitor_error_modules_graph(dom, legend, series);
+            });
+        });
+    }
+
+    function monitor_error_modules_graph(dom, legend, series) {
+        var myChart = E.init(dom);
+
+        var option = {
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: legend
+            },
+            series: series
+        };
+        myChart.setOption(option);
+    }
+
 });

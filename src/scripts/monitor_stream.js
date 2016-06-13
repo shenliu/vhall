@@ -705,7 +705,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             } else if (domain.indexOf("hls") !== -1) { // hls
                 // 格式: http://cn_domain/vhall/id/livestream.m3u8
                 // 格式: http://cc_domain/vhall/id/index.m3u8
-                var suffix = domain.startsWith("cn") ? "livestream.m3u8" : "/index.m3u8";
+                var suffix = domain.startsWith("cn") ? "/livestream.m3u8" : "/index.m3u8";
                 hash = ["http://", domain, "/vhall/", id, suffix];
                 url = './player/jwp.html#' + hash.join("");
             }
@@ -830,14 +830,24 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                             each[elem] = [];
                                         }
 
-                                        each[elem].push(alluser[type][elem] || 0);
+                                        if (alluser[type]) {
+                                            each[elem].push(alluser[type][elem] || 0);
+                                        } else {
+                                            each[elem].push(0);
+                                        }
+
                                     });
 
                                     $.each(obj, function(i, elem) {
                                         if (!(elem in each_bad)) {
                                             each_bad[elem] = [];
                                         }
-                                        each_bad[elem].push(baduser[type][elem] || 0);
+                                        if (baduser[type]) {
+                                            each_bad[elem].push(baduser[type][elem] || 0);
+                                        } else {
+                                            each_bad[elem].push(0);
+                                        }
+
                                     });
                                 }
 
