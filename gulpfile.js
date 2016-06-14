@@ -6,6 +6,7 @@ var dist_path = "D:/programme/kgb/show/static/dist/";
 var plugins = require('gulp-load-plugins')(),
 	del = require('del'),
     combiner = require('stream-combiner2');
+var cleanCSS = require('gulp-clean-css');
 
 // step 1: 清空dist
 gulp.task('clean', function() {
@@ -122,7 +123,7 @@ gulp.task('stylesheets', ['build-less'], function() {
         //.pipe(plugins.rename({
         //    suffix: '.min'
         //}))
-        .pipe(plugins.minifyCss())
+        .pipe(cleanCSS())
         .pipe(gulp.dest('./src/css/'));
 });
 
