@@ -726,6 +726,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                     onHide: function() {
                         var ifr = $("iframe")[0];
                         ifr.contentWindow.player_stop();
+                        $('.ui.embed').find(".embed").remove();
                     }
                 })
                 .modal('setting', 'transition', "fly down")
