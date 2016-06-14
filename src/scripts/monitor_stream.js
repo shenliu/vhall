@@ -262,6 +262,11 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 }
             });
 
+            // 手动刷新
+            toolbar.find(".vh-tb-reload").on("click", function() {
+                table.ajax.reload();
+            });
+
         });
     }
 
