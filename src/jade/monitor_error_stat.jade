@@ -22,7 +22,7 @@ block content
                 div.column
                     div.vh-error-stat-overview
             div.one.column.row
-                h3.ui.header.vh-error-stat-header.center.aligned(style="margin:0 auto;")
+                h3.ui.header.vh-error-stat-header-pie.center.aligned(style="margin:0 auto;")
             div.seven.column.row.divided
                 div.column
                     h5.ui.header 第三方
@@ -48,5 +48,7 @@ block content
 
             div.one.column.row
                 div.column
+                    h3.ui.header.vh-error-stat-header-col.center.aligned(style="margin:0 auto;")
+                    div.vh-error-stat-host
 
     script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_error_stat")

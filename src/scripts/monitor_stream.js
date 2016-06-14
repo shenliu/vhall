@@ -861,12 +861,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                         name: legend[i],
                                         type: "bar",
                                         stack: '总量',
-                                        label: {
-                                            normal: {
-                                                show: false,
-                                                position: 'inside'
-                                            }
-                                        },
                                         data: d
                                     });
                                 });
@@ -887,12 +881,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                                         name: legend[i],
                                         type: "bar",
                                         stack: '总量',
-                                        label: {
-                                            normal: {
-                                                show: false,
-                                                position: 'inside'
-                                            }
-                                        },
                                         data: each[o]
                                     });
                                 });

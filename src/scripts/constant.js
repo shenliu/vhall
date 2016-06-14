@@ -273,7 +273,8 @@ define(function () {
 
             monitor_host: host + "hosts",
 
-            monitor_error_stat_overview: host + "stream_error_count_query"
+            monitor_error_stat_overview: host + "stream_error_count_query",
+            monitor_error_stat_host: host + "stream_host_error_count_query"
         },
         
         level: {
