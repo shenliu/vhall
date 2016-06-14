@@ -211,7 +211,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 $(_data).each(function(idx, elem) { // idx: 0, 1, 2 ...  elem: {"09:10:50": {"14002": {"xxx.vhall.com": 2, ...}, ...}}
                     var key = _.keys(elem); // key: ["09:10:50"]
                     var obj = elem[key[0]]; // obj: {"14002": {"xxx.vhall.com": 2, ...}, ...}
-                    times.push(key[0]);
+                    //times.push(key[0]);
                     var o = obj[code]; // o: {"xxx.vhall.com": 2, ...}
                     if (o) {
                         var _o = {};
@@ -226,6 +226,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 // data -> [{"09:10:50": {"xxx.vhall.com": 2, ...}}, ...]
                 $(data).each(function (idx, elem) { // idx: 0, 1, 2 ... elem: {"09:10:50": {"xxx.vhall.com": 2, ...}}
                     var key = _.keys(elem)[0];
+                    times.push(key);
                     $.each(elem[key], function(k, v) { // elem[key]: {"xxx.vhall.com": 2, ...}
                         if (_.indexOf(hosts, k) === -1) {
                             hosts.push(k);
@@ -258,7 +259,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                     });
                 });
 
-                $(".vh-error-stat-header-col").html(code + "数据");
+                $(".vh-error-stat-header-col").html(code + ": " + C.message[code]);
 
                 var dom = $(".vh-error-stat-host")[0];
 
