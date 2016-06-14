@@ -66,7 +66,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             var dom = $(".vh-error-stat-overview")[0];
             var axis = _.keys(errorStatData);
 
-            monitor_error_overview_graph(dom, axis, legend, series);
+            monitor_error_overview_graph(dom, axis, legend, series, true);
         }, null);
 
     }
@@ -74,7 +74,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     /**
      *  第一个柱状图 总览图
      */
-    function monitor_error_overview_graph(dom, axis, legend, series) {
+    function monitor_error_overview_graph(dom, axis, legend, series, addEvent) {
         var myChart = E.init(dom);
 
         var option = {
@@ -110,7 +110,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
 
         myChart.setOption(option);
 
-        monitor_error_overview_event(myChart);
+        addEvent && monitor_error_overview_event(myChart);
     }
 
     /**
