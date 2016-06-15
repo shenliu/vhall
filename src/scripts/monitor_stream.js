@@ -229,7 +229,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
 
             // 筛选按钮
             toolbar.find(".ui.button.vh-tb-filter").on("click", function() {
-                _filter(table);
+                _filter(table, false);
             });
 
             $('.ui.dropdown').dropdown();
@@ -267,17 +267,52 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 table.ajax.reload();
             });
 
+            // 快捷筛选
+            toolbar.find(".ui.idea").popup({
+                position: "bottom right",
+                offset: 12,
+                hoverable: true
+            });
+
+            toolbar.find(".vh-tb-shortcut").on("click", "a", function(e) {
+                var target = $(e.currentTarget);
+                var id = target.attr("data-id");
+                switch(id) {
+                    case "1": // 过滤结束流
+                        _setFilter(4, "text", 5, "结束");
+                        _filter(table, false);
+                        break;
+                    case "2": // 流ID大于10的
+                        _setFilter("0", "length", 3, 10);
+                        _filter(table, false);
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            // 取消筛选
+            toolbar.find("button.vh-tb-filter-cancel").on("click", function() {
+                $.fn.dataTable.ext.search.length = 0;
+                _resetFilter();
+                table.draw();
+            });
+
         });
     }
 
     /**
      *  toolbar筛选条件
      *  @param {object} table 控件
+     *  @param {boolean} isMultiple 是否多重查询
       * @private
      */
-    function _filter(table) {
+    function _filter(table, isMultiple) {
         var search = $.fn.dataTable.ext.search;
-        _default();
+
+        // 多重查询
+        !isMultiple &&　_default();
+
         var filters = _getFilter();
         if (filters) {
             $(filters).each(function(idx, item) {
@@ -429,7 +464,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
 
     /**
      *  解析toolbar中的筛选条件
-      * @returns {*[]} 无筛选条件  {array} 一个或多个条件
+     * @returns {*[]} 无筛选条件  {array} 一个或多个条件
      * @private
      */
     function _getFilter() {
@@ -464,6 +499,44 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             oper: oper,
             val: val
         }];
+    }
+
+    /**
+     *  设置toolbar中的筛选条件
+     * @param col
+     * @param dimension
+     * @param oper
+     * @param val
+     * @private
+     */
+    function _setFilter(col, dimension, oper, val) {
+        var toolbar = $(".vh-table-toolbar").eq(0);
+        // 列 vh-tb-col
+        toolbar.find(".ui.dropdown.vh-tb-col").dropdown("set selected", col);
+
+        // 维度 vh-tb-dimension
+        toolbar.find(".ui.dropdown.vh-tb-dimension").dropdown("set selected", dimension);
+
+        // 操作 vh-tb-oper
+        toolbar.find(".ui.dropdown.vh-tb-oper").dropdown("set selected", oper);
+
+        // 值 vh-tb-val
+        toolbar.find(".ui.input.vh-tb-val input").val(val);
+    }
+
+    function _resetFilter() {
+        var toolbar = $(".vh-table-toolbar").eq(0);
+        // 列 vh-tb-col
+        toolbar.find(".ui.dropdown.vh-tb-col").dropdown("restore defaults");
+
+        // 维度 vh-tb-dimension
+        toolbar.find(".ui.dropdown.vh-tb-dimension").dropdown("restore defaults");
+
+        // 操作 vh-tb-oper
+        toolbar.find(".ui.dropdown.vh-tb-oper").dropdown("restore defaults");
+
+        // 值 vh-tb-val
+        toolbar.find(".ui.input.vh-tb-val input").val("");
     }
 
     /**

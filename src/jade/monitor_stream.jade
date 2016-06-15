@@ -17,7 +17,7 @@ include _modal
 block css
     link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
     link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/jquery.dataTables.min.css")
-    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/fixedColumns.dataTables.min.css")
+    //-link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/fixedColumns.dataTables.min.css")
     link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
     link(rel="stylesheet", type="text/css", property='stylesheet', href="css/monitor.css")
 
@@ -283,6 +283,19 @@ block content
                 </div>
 
                 <button class="ui button blue vh-tb-filter">筛选</button>
+
+                <i class="ui icon idea" style="font-size:1.5em;margin: 0 12px;"></i>
+                <div class="ui popup hidden">
+                    <div class="ui three grid vh-tb-shortcut">
+                        <a class="column" href="###" data-id="1" title="过滤结束流">1</a>
+                        <a class="column" href="###" data-id="2" title="流ID大于10的">2</a>
+                        <a class="column" href="###" data-id="3" title="待定...">3</a>
+                    </div>
+                </div>
+
+                <button class="ui icon button compact vh-tb-filter-cancel" title="取消筛选条件">
+                    <i class="ui icon trash outline"></i>
+                </button>
 
             </div>
             <div class="right menu">

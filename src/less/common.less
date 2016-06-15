@@ -63,6 +63,8 @@ html, body {
 
 .vh-container {
   width: 100%!important;
+  margin-top: 0!important;
+  border-top: 0!important;
 }
 
 .vh-message {
@@ -81,6 +83,54 @@ html, body {
 
   p {
     text-indent: 1em;
+  }
+}
+
+.vh-main-header.ui.menu {
+  background-color: #fff;
+  height: 30px;
+
+  .item {
+    font-size: 14px;
+    color: #999;
+  }
+
+  .link .item:hover, .dropdown.item:hover,
+  .link.item:hover, a.item:hover, .active.item {
+    cursor: pointer;
+    color: @vh;
+    border-bottom: 2px solid @vh;
+    background: none;
+  }
+
+  .item:before {
+    position: absolute;
+    content: '';
+    top: 30%;
+    right: 0;
+    height: 40%;
+    width: 1px;
+    background: #242424;
+    box-shadow: 1px 1px rgba(255, 255, 255, .6);
+  }
+
+  .right.item:before {
+    box-shadow: none;
+    background: #464646;
+  }
+
+  a[href="###"] {
+    color: #464646!important;
+    &:hover, &:active {
+      text-decoration: none;
+    }
+  }
+
+  a[href="##"] {
+    color: #fff!important;
+    &:hover, &:active {
+      text-decoration: none;
+    }
   }
 }
 
@@ -157,8 +207,10 @@ a[href='###'], a[href^='javascript:'] {
   color: rgba(0, 0, 0, 0.870588);
 }
 
-#container {
-  min-width: @min-width;
+@media screen and (min-width: @min-width) {
+  #container {
+    min-width: @min-width;
+  }
 }
 
 @media screen and (max-width: @min-width) {

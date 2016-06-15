@@ -46,7 +46,7 @@
         }
 
         $(function(){
-            _url = location.hash.slice(1);
+            _url = location.hash.slice(1, -1);
             $(".header").find("h5").html(_url);
             player_start();
         });
