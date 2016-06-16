@@ -6,6 +6,4 @@ src/*.html
 src/data.json
 src/css/*.css
 del.bat
-
-src/jade/monitor_stream_mobile.jade
-src/scripts/monitor_stream_mobile.js
+bak/
