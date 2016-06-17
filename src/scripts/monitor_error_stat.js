@@ -28,6 +28,8 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
 
     var errorStatData = {}; // {"17:52:00": {"1": {"14001": 32}}}
 
+    var curModule; // 当前点击饼图后的模块id
+
     // init
     $(function() {
         monitor_error_overview();
@@ -66,7 +68,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             var dom = $(".vh-error-stat-overview")[0];
             var axis = _.keys(errorStatData);
 
-            monitor_error_overview_graph(dom, axis, legend, series, true);
+            monitor_error_overview_graph(dom, axis, legend, series, monitor_error_overview_event);
         }, null);
 
     }
@@ -74,7 +76,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     /**
      *  第一个柱状图 总览图
      */
-    function monitor_error_overview_graph(dom, axis, legend, series, addEvent) {
+    function monitor_error_overview_graph(dom, axis, legend, series, doEvent) {
         var myChart = E.init(dom);
 
         var option = {
@@ -110,7 +112,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
 
         myChart.setOption(option);
 
-        addEvent && monitor_error_overview_event(myChart);
+        doEvent && doEvent(myChart);
     }
 
     /**
@@ -201,6 +203,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
      */
     function monitor_error_modules_event(myChart) {
         myChart.on("click", function(params) {
+            var module = params.seriesName; // module
             var name = params.name;
             var code = name.split(" ")[0]; // 要显示的错误代码
             var times = []; // 时间轴
@@ -268,9 +271,24 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 if (instance) {
                     instance.dispose();
                 }
-                monitor_error_overview_graph(dom, times, legend, series);
+                
+                curModule = _.invert(C.modules)[module]; // 当前的模块id
+                monitor_error_overview_graph(dom, times, legend, series, monitor_error_host_event);
             }, null);
         });
     }
 
+    function monitor_error_host_event(myChart) {
+        myChart.on("click", function(params) {
+            var host = params.seriesName; // 主机名
+
+            var url = C.pages.log_search;
+            var p = {
+                host: host,
+                module: curModule
+            };
+            url += "?" + $.param(p);
+            window.open(encodeURI(url), "_blank");
+        });
+    }
 });

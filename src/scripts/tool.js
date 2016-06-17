@@ -186,6 +186,14 @@ define(function (){
         return str.replace(reg, "");
     }
 
+    function getUrlParam(name, str) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = str.match(reg);
+        if ( r != null)
+            return decodeURI(r[2]);
+        return null;
+    }
+
     return {
         xhr_get: function(url, done, fail) {
             $.ajax({
@@ -204,6 +212,8 @@ define(function (){
         stripHTML: stripHTML,
 
         random: random,
+
+        urlParam: getUrlParam,
 
         base64: {
             encode: function(value) {

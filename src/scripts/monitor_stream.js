@@ -56,13 +56,11 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
 
     // init
     $(function() {
-        monitor_table(C.url.monitor_stream);
+        monitor_table();
         monitor_table_event();
     });
 
-    function monitor_table(url) {
-        C.debug && (url = "./data.json"); // mock!!!!!
-
+    function monitor_table() {
         var reloadInterval, countDownInterval;
 
         var templateCollect = _.template($("#tpl_td_collect").html());
@@ -89,7 +87,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             ,"lengthMenu": [[25, 50, 75, 100, -1], [25, 50, 75, 100, '全部']]
             //,"order": [[ 0, 'desc' ]]
             ,"ajax": {
-                "url": url,
+                "url": C.url.monitor_stream,
                 "dataSrc": ""
             }
             ,"order": [[ 12, "desc" ]]

@@ -7,6 +7,12 @@ define(function () {
     return {
         debug: false,
 
+        pages: {
+            stream: "monitor_stream.html",
+            error_stat: "monitor_error_stat.html",
+            log_search: "monitor_log_search.html"
+        },
+
         message: {
             '12001': '开始推流',
             '12002': '停止推流',
@@ -274,7 +280,11 @@ define(function () {
             monitor_host: host + "hosts",
 
             monitor_error_stat_overview: host + "stream_error_count_query",
-            monitor_error_stat_host: host + "stream_host_error_count_query"
+            monitor_error_stat_host: host + "stream_host_error_count_query",
+            monitor_log_search: host + "search?streamid={id}&hostname={host}&mod={mod}&code={code}&timeframe={time}",
+
+            monitor_get_streams: host + "get_stream",
+            monitor_get_hosts: host + "get_host"
         },
         
         level: {

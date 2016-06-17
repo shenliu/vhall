@@ -1,0 +1,112 @@
+//
+   Created by shen on 2016/6/16.
+
+extends _main
+
+block title
+    title 日志查询
+
+//- 引入 模态对话框
+//- include _modal
+
+block css
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/jquery.dataTables.min.css")
+    //-link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/fixedColumns.dataTables.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/monitor.css")
+
+block content
+    div.ui.main.container.raised.segment#container.vh-container
+        h2(class="ui header vh-table")
+            i(class="search icon")
+            div(class="content") 日志查询
+
+        .ui.menu.vh-search-bar
+            span.item.header 查询条件:
+            .item
+                .ui.sub.header 流ID:
+                .ui.selection.dropdown.vh-search-id(style="width:260px;")
+                    input(type='hidden', name='search_id')
+                    i.dropdown.icon
+                    .default.text
+                    .menu
+
+                .ui.sub.header 主机:
+                .ui.selection.dropdown.vh-search-host(style="width:300px;")
+                    input(type='hidden', name='search_host')
+                    i.dropdown.icon
+                    .default.text
+                    .menu
+
+                .ui.sub.header 模块:
+                .ui.selection.dropdown.vh-search-module
+                    input(type='hidden', name='search_module')
+                    i.dropdown.icon
+                    .default.text
+                    .menu
+
+                .ui.sub.header 错误代码:
+                .ui.input.vh-search-code(style="width:150px;")
+                    input(title='', type='text')
+
+                .ui.vh-search-time
+                    .ui.sub.header 时间:
+                        b 1
+                        |天以内
+                    input(title='', type='range', min='1', max='7', value='1')
+
+                button.ui.button.blue.vh-search-btn 查询
+
+        table.ui.table.striped.celled.display.nowrap.compact.dataTable(cellspacing='0', width='100%')
+            thead
+                tr
+                    th 流ID
+                    th 主机名
+                    th 模块
+                    th 错误代码
+                    th 时间
+                    th src_ip
+                    th ci
+                    th uid
+                    th log_id
+                    th tt
+                    th pid
+                    th si
+                    th log_session
+                    th s
+                    th sd
+                    th attr
+                    th _id
+                    th type
+            tfoot
+                tr
+                    th 流ID
+                    th 主机名
+                    th 模块
+                    th 错误代码
+                    th 时间
+                    th src_ip
+                    th ci
+                    th uid
+                    th log_id
+                    th tt
+                    th pid
+                    th si
+                    th log_session
+                    th s
+                    th sd
+                    th attr
+                    th _id
+                    th type
+            tbody
+
+    div.ui.warning.message.compact.hidden.vh-search-warning
+        i.close.icon
+        div.header 注意事项
+        ul.list
+            li 必须选择<流ID>或<主机>其中的一个.
+            li 必须选择一个<模块>.
+            li 必须选择一个<时间范围>.
+
+    script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_log_search")
