@@ -22,6 +22,7 @@ define(function () {
             '12006': '视频设置',
             '12007': '推流状态',
             '12008': '主机配置信息',
+            '12009': '用户重连推流开始',
             '14001': '无法连接到源节点',
             '14002': '网络状况差',
             '14003': '主机性能差',
@@ -51,6 +52,13 @@ define(function () {
             '24502': 'edge→core发送数据失败',
             '24503': 'edge→core数据队列shrink',
             '24901': '发起帧数不够，卡顿',
+
+            '52001': '推流开始',
+            '52002': '推流结束',
+            '52005': '推流心跳',
+            '54001': '推流卡顿',
+            '54003': '编码卡顿',
+            '54005': '推流失败',
 
             '62001': '推流开始',
             '62002': '推流结束',
@@ -281,6 +289,8 @@ define(function () {
 
             monitor_error_stat_overview: host + "stream_error_count_query",
             monitor_error_stat_host: host + "stream_host_error_count_query",
+            monitor_error_stat_oneday: host + "oneday_error_count_query",
+
             monitor_log_search: host + "search?streamid={id}&hostname={host}&mod={mod}&code={code}&timeframe={time}",
 
             monitor_get_streams: host + "get_stream",

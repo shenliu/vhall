@@ -34,6 +34,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     // init
     $(function() {
         monitor_error_overview();
+        monitor_error_oneday();
     });
 
     /**
@@ -69,7 +70,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             var dom = $(".vh-error-stat-overview")[0];
             var axis = _.keys(errorStatData);
 
-            monitor_error_overview_graph(dom, axis, legend, series, monitor_error_overview_event);
+            monitor_error_overview_graph(dom, axis, legend, series, null);
         }, null);
 
     }
@@ -117,13 +118,66 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     }
 
     /**
-     * 总览图 点击事件
+     *  7个饼图
+     */
+    function monitor_error_oneday() {
+        T.xhr_get(C.url.monitor_error_stat_oneday, function(data, textStatus, jqXHR) {
+            $.each(data, function(k, v) { // k: 1, 2, 11, 12, ... v: {14002: 29, ...}
+                var name = C.modules[k];
+                var legend = [], vals = [], series = [];
+                $.each(v, function(i, j) { // i: 14002  j: 29
+                    var _s = i + " " + C.message[i];
+                    legend.push(_s);
+                    vals.push({
+                        value: j,
+                        name: _s
+                    });
+                });
+
+                series.push({
+                    name: name,
+                    type: 'pie',
+                    radius : '50%',
+                    center: ['50%', '75%'],
+                    data: vals,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                });
+
+                $(".vh-error-stat-header-pie").html("一天数据");
+
+                var dom = $('.vh-error-stat-modules-' + k)[0];
+                var instance = E.getInstanceByDom(dom);
+                if (instance) {
+                    instance.dispose();
+                }
+
+                monitor_error_modules_graph(dom, legend, series);
+            });
+
+            // 删除第二个柱状图
+            var instance = E.getInstanceByDom($(".vh-error-stat-host")[0]);
+            if (instance) {
+                instance.dispose();
+                $(".vh-error-stat-header-col").empty();
+            }
+        });
+    }
+
+    /**
+     * 总览图 点击事件 暂不用
      * @param myChart
      */
     function monitor_error_overview_event(myChart) {
         myChart.on("click", function(params) {
             var time = params.name;
             var data = errorStatData[time];
+            console.log(data);
             // data -> {1: {14002: 29, ...}, 2: Object, 11: Object, 12: Object, 13: Object, 14: Object, 20: Object}
             $.each(data, function(k, v) { // k: 1, 2, 11, 12, ... v: {14002: 29, ...}
                 var name = C.modules[k];
@@ -310,6 +364,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                         if (doc.length) {
                             doc.find("html").css("overflow", "auto");
                             doc.find(".vh-main-header").remove();
+                            doc.find(".vh-footer").remove();
                             doc.find("h2.ui.header.vh-table").remove();
                         }
                     },
