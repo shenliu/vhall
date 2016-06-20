@@ -29,6 +29,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     var errorStatData = {}; // {"17:52:00": {"1": {"14001": 32}}}
 
     var curModule; // 当前点击饼图后的模块id
+    var curCode; // 当前点击饼图后的错误代码code
 
     // init
     $(function() {
@@ -273,11 +274,16 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 }
                 
                 curModule = _.invert(C.modules)[module]; // 当前的模块id
+                curCode = code;
                 monitor_error_overview_graph(dom, times, legend, series, monitor_error_host_event);
             }, null);
         });
     }
 
+    /**
+     * 第二个柱状图点击事件
+     * @param myChart
+     */
     function monitor_error_host_event(myChart) {
         myChart.on("click", function(params) {
             var host = params.seriesName; // 主机名
@@ -285,7 +291,8 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             var url = C.pages.log_search;
             var p = {
                 host: host,
-                module: curModule
+                module: curModule,
+                code: curCode
             };
             url += "?" + $.param(p);
 

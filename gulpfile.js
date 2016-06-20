@@ -59,6 +59,13 @@ gulp.task('buildlib', function() {
         .pipe(plugins.replace('../../node_modules/echarts/dist/echarts.min', './3rd/echarts.min'))
         .pipe(gulp.dest(dist_path + 'scripts/'));
 
+    gulp.src(dist_path + 'scripts/monitor_log_search.js')
+        .pipe(plugins.replace('../../node_modules/jquery/dist/jquery.min', './3rd/jquery.min'))
+        .pipe(plugins.replace('../semantic/semantic.min', './3rd/semantic/semantic.min'))
+        .pipe(plugins.replace('../../node_modules/underscore/underscore-min', './3rd/underscore-min'))
+        .pipe(plugins.replace('../../node_modules/echarts/dist/echarts.min', './3rd/echarts.min'))
+        .pipe(gulp.dest(dist_path + 'scripts/'));
+
     //--------------------------css-------------------------------------
 
     gulp.src('./src/css/**/*')
@@ -80,6 +87,10 @@ gulp.task('buildlib', function() {
         .pipe(gulp.dest(dist_path));
 
     gulp.src(dist_path + 'monitor_error_stat.html')
+        .pipe(plugins.replace('semantic/semantic.min.css', 'css/3rd/semantic/semantic.min.css'))
+        .pipe(gulp.dest(dist_path));
+
+    gulp.src(dist_path + 'monitor_log_search.html')
         .pipe(plugins.replace('semantic/semantic.min.css', 'css/3rd/semantic/semantic.min.css'))
         .pipe(gulp.dest(dist_path));
 
