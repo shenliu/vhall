@@ -288,7 +288,32 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 module: curModule
             };
             url += "?" + $.param(p);
-            window.open(encodeURI(url), "_blank");
+
+            $(".ui.modal.vh-modal-log_search")
+                .modal({
+                    closable: false,
+                    onShow: function() {
+                        $('.ui.embed').embed({
+                            url: encodeURI(url)
+                        });
+                    },
+                    onVisible: function() {
+                        var ifr = $("iframe");
+                        var doc = $(ifr[0].contentWindow.document);
+                        if (doc.length) {
+                            doc.find("html").css("overflow", "auto");
+                            doc.find(".vh-main-header").remove();
+                            doc.find("h2.ui.header.vh-table").remove();
+                        }
+                    },
+                    onHide: function() {
+                        $('.ui.embed').find(".embed").remove();
+                    }
+                })
+                .modal('setting', 'transition', "swing right")
+                .modal('show').modal("refresh");
+
+            //window.open(encodeURI(url), "_blank");
         });
     }
 });

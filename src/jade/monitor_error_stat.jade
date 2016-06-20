@@ -6,6 +6,9 @@ extends _main
 block title
     title 流媒体服务实时监控系统 - 错误统计
 
+//- 引入 模态对话框
+include _modal
+
 block css
     link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
     link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
@@ -50,5 +53,8 @@ block content
                 div.column
                     h3.ui.header.vh-error-stat-header-col.center.aligned(style="margin:0 auto;")
                     div.vh-error-stat-host
+
+    +modal('vh-modal-log_search fullscreen long', '日志查询', true, false, true)
+        include _embed
 
     script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_error_stat")

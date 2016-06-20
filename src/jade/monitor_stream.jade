@@ -68,7 +68,7 @@ block content
         +modal('vh-modal-summery-count fullscreen long', '统计图', true, false, true)
 
         +modal('vh-modal-player large', '播放', true, false, true)
-            include _player
+            include _embed
 
     script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_stream")
 
@@ -238,7 +238,7 @@ block content
         <div class="ui menu vh-relative" style="z-index: 200;">
             <span class="item">筛选: </span>
             <div class="item">
-                <div class="ui selection dropdown vh-tb-col">
+                <div class="ui selection dropdown vh-tb-col" style="width:150px;">
                     <input type="hidden" name="tb_col">
                     <i class="dropdown icon" />
                     <div class="default text">列</div>
@@ -254,7 +254,7 @@ block content
                     </div>
                 </div>
 
-                <div class="ui selection dropdown vh-tb-dimension">
+                <div class="ui selection dropdown vh-tb-dimension" style="width: 100px;">
                     <input type="hidden" name="tb_dimension">
                     <i class="dropdown icon" />
                     <div class="default text">维度</div>
@@ -265,7 +265,7 @@ block content
                     </div>
                 </div>
 
-                <div class="ui selection dropdown vh-tb-oper">
+                <div class="ui selection dropdown vh-tb-oper" style="width: 100px;">
                     <input type="hidden" name="tb_oper">
                     <i class="dropdown icon" />
                     <div class="default text">操作</div>

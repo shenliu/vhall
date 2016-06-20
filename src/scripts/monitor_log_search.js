@@ -86,7 +86,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
         }).val(1); // 初始为1
 
         // 查询按钮
-        bar.find(".vh-search-btn").on("click", function() {
+        bar.find(".vh-search-btn").on("click", function(e) {
             var id, host, module, code, time;
 
             // 流ID
@@ -112,6 +112,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
 
             // 时间范围
             time = bar.find(".vh-search-time input").val();
+
+            $(e.currentTarget).addClass("loading").attr("disabled", "disabled");
 
             monitor_log_search_table(id, host, module, code, time);
         });
@@ -160,7 +162,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                 "language": C.tableLocale
                 ,"autoWidth": false
                 ,"scrollX": true
-                ,"lengthMenu": [[50, 75, 100, -1], [50, 75, 100, '全部']]
+                ,"lengthMenu": [[25, 50, 75, 100, -1], [25, 50, 75, 100, '全部']]
                 ,"ajax": {
                     "url": url,
                     "dataSrc": ""
@@ -285,6 +287,9 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
 
             table.on( 'draw', function (e) {
 
+            }).on('xhr', function() {
+                // 恢复<查询>按钮的状态
+                $(".vh-search-btn").removeClass("loading").attr("disabled", false);
             }).on('init', function() {
                 // 隐藏type栏
                 table.column(17).visible(false);
@@ -299,16 +304,18 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
 
         } else {
             var search = location.search.slice(1);
+            if (search.charAt(search.length - 1) == "?") {
+                search = search.slice(0, -1);
+            }
+            if (search == "") {
+                return;
+            }
             host = T.urlParam("host", search);
             module = T.urlParam("module", search);
             id = T.urlParam("id", search);
             code = T.urlParam("code", search);
             // 时间范围 待定
 
-            console.log(host);
-            console.log(module);
-            console.log(id);
-            console.log(code);
         }
 
         var bar = $(".vh-search-bar");
