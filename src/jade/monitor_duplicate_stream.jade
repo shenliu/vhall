@@ -1,0 +1,65 @@
+//-
+   Created by shen on 2016/6/22.
+
+extends _main
+
+block title
+    title 重复推流列表
+
+//- 引入 模态对话框
+//- include _modal
+
+block css
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/jquery.dataTables.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/monitor.css")
+
+block content
+    div.ui.main.container.raised.segment#container.vh-container
+        h2(class="ui header vh-table")
+            i(class="random icon")
+            div(class="content") 重复推流列表
+
+        table.ui.table.striped.celled.display.nowrap.compact.dataTable.vh-table-duplicate-stream(cellspacing='0', width='100%')
+            thead
+                tr
+                    th 流ID
+                    th 主机名
+                    th 模块
+                    th 错误代码
+                    th 时间
+                    th src_ip
+                    th ci
+                    th uid
+                    th log_id
+                    th tt
+                    th pid
+                    th si
+                    th log_session
+                    th s
+                    th sd
+                    th attr
+                    th type
+            tfoot
+                tr
+                    th 流ID
+                    th 主机名
+                    th 模块
+                    th 错误代码
+                    th 时间
+                    th src_ip
+                    th ci
+                    th uid
+                    th log_id
+                    th tt
+                    th pid
+                    th si
+                    th log_session
+                    th s
+                    th sd
+                    th attr
+                    th type
+            tbody
+
+    script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_duplicate_stream")

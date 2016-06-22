@@ -268,12 +268,18 @@ button, input, optgroup, select, textarea, option {
   width: auto;
 }
 
-.ui.table.vh-table-log-search {
+.ui.table.vh-table-log-search,
+.ui.table.vh-table-duplicate-stream {
   li {
     word-wrap: break-word;
     letter-spacing: normal;
     white-space: pre-wrap;
     max-width: 300px;
-    word-break: break-word;
+    word-break: break-all;
   }
+}
+
+div[role='dialog'] {
+  top: 50%!important;
+  transform: translateY(-50%);
 }
