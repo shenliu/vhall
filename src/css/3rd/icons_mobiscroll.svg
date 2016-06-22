@@ -1,0 +1,53 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2016-6-21: Created.
+-->
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>
+Created by FontForge 20120731 at Tue Jun 21 09:54:18 2016
+ By root
+Created by root with FontForge 2.0 (http://fontforge.sf.net)
+</metadata>
+<defs>
+<font id="icons_mobiscroll" horiz-adv-x="427" >
+  <font-face 
+    font-family="icons_mobiscroll"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="512"
+    panose-1="2 0 6 3 0 0 0 0 0 0"
+    ascent="448"
+    descent="-64"
+    bbox="-0.25 -28.25 512 412.25"
+    underline-thickness="25.6"
+    underline-position="-51.2"
+    unicode-range="U+F100-F10B"
+  />
+    <missing-glyph />
+    <glyph glyph-name="uniF10B" unicode="&#xf10b;" 
+d="M427 251l-117 -101l35 -150l-132 80l-132 -80l35 150l-116 101l153 13l60 141l60 -141zM213 119l81 -48l-22 91l71 62l-93 8l-37 86l-36 -86l-93 -8l70 -62l-21 -91z" />
+    <glyph glyph-name="uniF101" unicode="&#xf101;" horiz-adv-x="236" 
+d="M230 2c7 -7 7 -18 0 -25s-17 -7 -24 0l-201 202c-7 7 -7 19 0 26l201 202c7 7 17 7 24 0s7 -18 0 -25l-182 -190z" />
+    <glyph glyph-name="uniF105" unicode="&#xf105;" horiz-adv-x="384" 
+d="M341 341h-298v-298h298v298zM341 384c23 0 43 -20 43 -43v-298c0 -23 -20 -43 -43 -43h-298c-23 0 -43 20 -43 43v298c0 23 20 43 43 43h298z" />
+    <glyph glyph-name="uniF10A" unicode="&#xf10a;" 
+d="M213 80l-132 -80l35 150l-116 101l153 13l60 141l60 -141l154 -13l-117 -101l35 -150z" />
+    <glyph glyph-name="uniF100" unicode="&#xf100;" horiz-adv-x="440" 
+d="M30 305v0l190 -183l190 183c7 7 18 7 25 0s7 -18 0 -25l-202 -201c-7 -7 -18 -7 -25 0l-203 201c-7 7 -7 18 0 25s18 7 25 0z" />
+    <glyph glyph-name="uniF108" unicode="&#xf108;" horiz-adv-x="158" 
+d="M0 97l98 98l-98 97l30 31l128 -128l-128 -128z" />
+    <glyph glyph-name="uniF102" unicode="&#xf102;" horiz-adv-x="236" 
+d="M5 2l183 190l-183 190c-7 7 -7 18 0 25s18 7 25 0l200 -202c7 -7 7 -19 0 -26l-200 -202c-7 -7 -18 -7 -25 0s-7 18 0 25z" />
+    <glyph glyph-name="uniF106" unicode="&#xf106;" horiz-adv-x="256" 
+d="M30 273l98 -98l98 98l30 -30l-128 -128l-128 128z" />
+    <glyph glyph-name="uniF109" unicode="&#xf109;" horiz-adv-x="256" 
+d="M30 119l-30 30l128 128l128 -128l-30 -30l-98 98z" />
+    <glyph glyph-name="uniF104" unicode="&#xf104;" horiz-adv-x="512" 
+d="M469 384c24 0 43 -19 43 -43v-298c0 -24 -19 -43 -43 -43h-320c-15 0 -26 8 -34 19l-115 173l115 173c8 11 19 19 34 19h320zM405 116l-76 76l76 76l-30 31l-76 -77l-77 77l-30 -31l76 -76l-76 -76l30 -31l77 77l76 -77z" />
+    <glyph glyph-name="uniF103" unicode="&#xf103;" horiz-adv-x="440" 
+d="M410 79v0l-190 183l-190 -183c-7 -7 -18 -7 -25 0s-7 18 0 25l203 201c7 7 18 7 25 0l202 -201c7 -7 7 -18 0 -25s-18 -7 -25 0z" />
+    <glyph glyph-name="uniF107" unicode="&#xf107;" horiz-adv-x="158" 
+d="M158 100l-30 -31l-128 128l128 128l30 -30l-98 -98z" />
+  </font>
+</defs></svg>

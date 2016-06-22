@@ -268,7 +268,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             // 快捷筛选
             toolbar.find(".ui.idea").popup({
                 position: "bottom right",
-                offset: 12,
+                offset: 5,
                 hoverable: true
             });
 

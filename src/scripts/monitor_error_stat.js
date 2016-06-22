@@ -159,13 +159,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
 
                 monitor_error_modules_graph(dom, legend, series);
             });
-
-            // 删除第二个柱状图
-            var instance = E.getInstanceByDom($(".vh-error-stat-host")[0]);
-            if (instance) {
-                instance.dispose();
-                $(".vh-error-stat-header-col").empty();
-            }
+            
         });
     }
 
@@ -341,12 +335,25 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     function monitor_error_host_event(myChart) {
         myChart.on("click", function(params) {
             var host = params.seriesName; // 主机名
+            var time = params.name; // 时间 02:12:23
+
+            var start = time.slice(0, 2); // 起始时间
+            var end = parseInt(start) + 1; // 结束时间
+            if (end === 24) {
+                end = "00";
+            }
+
+            if (end < 10) {
+                end = "0" + end;
+            }
 
             var url = C.pages.log_search;
             var p = {
                 host: host,
                 module: curModule,
-                code: curCode
+                code: curCode,
+                start: start,
+                end: end
             };
             url += "?" + $.param(p);
 

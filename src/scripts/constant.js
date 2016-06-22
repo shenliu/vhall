@@ -291,7 +291,7 @@ define(function () {
             monitor_error_stat_host: host + "stream_host_error_count_query",
             monitor_error_stat_oneday: host + "oneday_error_count_query",
 
-            monitor_log_search: host + "search?streamid={id}&hostname={host}&mod={mod}&code={code}&timeframe={time}",
+            monitor_log_search: host + "search?streamid={id}&hostname={host}&mod={mod}&code={code}&day={date}&timestart={start}&timeend={end}",
 
             monitor_get_streams: host + "get_stream",
             monitor_get_hosts: host + "get_host"

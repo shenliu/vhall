@@ -21,20 +21,25 @@ require.config({
         'fixedCol': {
             deps: ['dataTable'],
             exports: 'fixedCol'
+        },
+
+        'mscroll': {
+            deps: ['jquery'],
+            exports: 'mscroll'
         }
     },
     paths: {
         "jquery": "../../node_modules/jquery/dist/jquery.min",
         "semantic": "../semantic/semantic.min",
         "dataTable": "./3rd/jquery.dataTables",
-        //"fixedCol": "./3rd/dataTables.fixedColumns.min",
+        "mscroll": "./3rd/mobiscroll.custom-3.0.0.min",
         "underscore": "../../node_modules/underscore/underscore-min",
         "echarts": "../../node_modules/echarts/dist/echarts.min"
     }
 });
 
-require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'],
-    function($, semantic, dataTable, _, C, T) {
+require(['jquery', 'semantic', 'dataTable', 'mscroll', 'underscore', './constant', './tool'],
+    function($, semantic, dataTable, mscroll, _, C, T) {
 
     $(function() {
         _init(monitor_auto_search);
@@ -57,19 +62,56 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
         ).done(function(data_id, data_host) {
             data_id = JSON.parse(data_id[0]);
             data_host = JSON.parse(data_host[0]);
+            // 流ID
             html = ['<div class="item" data-value="">无</div>'];
             $(data_id).each(function(i, elem) {
                 html.push('<div class="item" data-value="', elem, '">', elem, '</div>');
             });
             $(".vh-search-id").find(".menu").html(html.join(""));
 
+            // 主机
             html = ['<div class="item" data-value="">无</div>'];
             $(data_host).each(function(i, elem) {
                 html.push('<div class="item" data-value="', elem, '">', elem, '</div>');
             });
+            html.push('<div class="item" data-value="None">None</div>');
             $(".vh-search-host").find(".menu").html(html.join(""));
 
             $(".ui.dropdown").dropdown();
+
+            // 日期
+            var now = new Date(),
+                until = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+
+            $('#vh-date').mobiscroll().date({
+                theme: 'material',
+                lang: 'zh',
+                display: 'bottom',
+                dateWheels: 'yymmdd',
+                dateFormat: 'yy/mm/dd',
+                min: until,
+                minWidth: 100,
+                max: now
+            }).val(T.dateFormat(now, "yyyy/MM/dd"));
+
+            $('#vh-date').mobiscroll('getInst').setVal(now);
+
+            // 时间
+            $('#vh-time-start').mobiscroll().time({
+                theme: 'material',
+                lang: 'zh',
+                display: 'bottom',
+                timeFormat: 'HH:ii:00',
+                timeWheels: 'HHii'
+            }).val("00:00:00");
+
+            $('#vh-time-end').mobiscroll().time({
+                theme: 'material',
+                lang: 'zh',
+                display: 'bottom',
+                timeFormat: 'HH:ii:59',
+                timeWheels: 'HHii'
+            }).val("23:59:59");
 
             callback && callback();
         });
@@ -78,27 +120,15 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
     function monitor_log_search_event() {
         var bar = $(".vh-search-bar");
 
-        // 时间范围
-        var time = bar.find(".vh-search-time");
-        time.find("input").on("change", function(e) {
-            var ipt = $(e.currentTarget);
-            time.find("b").html(ipt.val());
-        }).val(1); // 初始为1
-
         // 查询按钮
         bar.find(".vh-search-btn").on("click", function(e) {
-            var id, host, module, code, time;
+            var id, host, module, code, date, timeStart, timeEnd;
 
             // 流ID
             id = bar.find(".ui.dropdown.vh-search-id").dropdown("get value");
 
             // 主机
             host = bar.find(".ui.dropdown.vh-search-host").dropdown("get value");
-
-            if (id == "" && host == "") {
-                _message();
-                return;
-            }
 
             // 模块
             module = bar.find(".ui.dropdown.vh-search-module").dropdown("get value");
@@ -109,13 +139,19 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
 
             // 错误代码
             code = bar.find(".vh-search-code input").val().trim();
+            if (code == "") {
+                _message();
+                return;
+            }
 
             // 时间范围
-            time = bar.find(".vh-search-time input").val();
+            date = bar.find("#vh-date").val();
+            timeStart = bar.find("#vh-time-start").val();
+            timeEnd = bar.find("#vh-time-end").val();
 
             $(e.currentTarget).addClass("loading").attr("disabled", "disabled");
 
-            monitor_log_search_table(id, host, module, code, time);
+            monitor_log_search_table(id, host, module, code, date, timeStart, timeEnd);
         });
 
         // message close
@@ -140,15 +176,19 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
      * @param host
      * @param module
      * @param code
-     * @param time
+     * @param date
+     * @param timeStart
+     * @param timeEnd
      */
-    function monitor_log_search_table(id, host, module, code, time) {
+    function monitor_log_search_table(id, host, module, code, date, timeStart, timeEnd) {
         var url = C.url.monitor_log_search
             .replace("{id}", id)
             .replace("{host}", host)
             .replace("{mod}", module)
             .replace("{code}", code)
-            .replace("{time}", time);
+            .replace("{date}", date.replace(/\//g, ""))
+            .replace("{start}", timeStart)
+            .replace("{end}", timeEnd);
 
         var $table = $("table.ui.table");
 
@@ -267,13 +307,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                         return html.join("");
                     }
                 }, {
-                    // _id idx: 16
-                    data: "_id",
-                    render: function (data, type, row, meta) {
-                        return data.$oid || "-";
-                    }
-                }, {
-                    // type idx: 17
+                    // type idx: 16
                     data: "type",
                     render: function (data, type, row, meta) {
                         if (data == 4) {
@@ -292,14 +326,18 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                 $(".vh-search-btn").removeClass("loading").attr("disabled", false);
             }).on('init', function() {
                 // 隐藏type栏
-                table.column(17).visible(false);
+                table.column(16).visible(false);
             });
         }
 
     }
 
+    /**
+     * url有search时 自动运行
+     * @param params
+     */
     function monitor_auto_search(params) {
-        var host, module, id, code;
+        var host, module, id, code, start, end;
         if (params) {
 
         } else {
@@ -314,8 +352,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
             module = T.urlParam("module", search);
             id = T.urlParam("id", search);
             code = T.urlParam("code", search);
-            // 时间范围 待定
-
+            start = T.urlParam("start", search);
+            end = T.urlParam("end", search);
         }
 
         var bar = $(".vh-search-bar");
@@ -334,6 +372,12 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
 
         if (code) {
             bar.find(".ui.input.vh-search-code input").val(code);
+        }
+
+        if (start) {
+            bar.find("#vh-date").val(T.dateFormat(new Date(), "yyyy/MM/dd"));
+            bar.find("#vh-time-start").val(start + ":00:00");
+            bar.find("#vh-time-end").val(end + ":00:00");
         }
 
         bar.find(".vh-search-btn").trigger("click");
