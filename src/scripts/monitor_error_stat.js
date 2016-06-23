@@ -20,6 +20,7 @@ require.config({
         "semantic": "../semantic/semantic.min",
         "underscore": "../../node_modules/underscore/underscore-min",
         "echarts": "../../node_modules/echarts/dist/echarts.min"
+        //,"chartheme": "../../node_modules/echarts/theme/dark"
     }
 });
 

@@ -65,16 +65,30 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                 ,"scrollX": true
                 ,"lengthMenu": [[25, 50, 75, 100, -1], [25, 50, 75, 100, '全部']]
                 ,"ajax": {
-                    "url": url,
-                    "dataSrc": ""
+                    "url": url
+                    ,"dataSrc": function(json) {
+                        var data = [];
+                        $(json).each(function(idx, elem) {
+                            $(elem).each(function(i, o) {
+                                data.push(o);
+                            });
+                        });
+                        return data;
+                    }
                 }
-                ,"order": [[ 4, "desc" ]]
+                ,"order": [[ 0, "desc" ]]
+                ,"columnDefs": [{
+                    "visible": false,
+                    "targets": 0
+                }]
                 ,"columns": [{
                     // 流ID idx: 0
                     data: "streamid"
+                    ,"orderable": false
                 }, {
                     // 主机名 idx: 1
                     data: "hostname"
+                    ,"orderable": false
                 }, {
                     // 模块 idx: 2
                     data: "mod",
@@ -84,9 +98,11 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                         } else
                             return "-";
                     }
+                    ,"orderable": false
                 }, {
                     // 错误代码 idx: 3
                     data: "code"
+                    ,"orderable": false
                 }, {
                     // 时间 idx: 4
                     data: "timestamp",
@@ -96,66 +112,77 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                         } else
                             return "-";
                     }
+                    ,"orderable": false
                 }, {
                     // src_ip idx: 5
                     data: "src_ip",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // ci idx: 6
                     data: "ci",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // uid idx: 7
                     data: "uid",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // log_id idx: 8
                     data: "log_id",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // tt idx: 9
                     data: "tt",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // pid idx: 10
                     data: "pid",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // si idx: 11
                     data: "si",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // log_session idx: 12
                     data: "log_session",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // s idx: 13
                     data: "s",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // sd idx: 14
                     data: "sd",
                     render: function (data, type, row, meta) {
                         return data || "-";
                     }
+                    ,"orderable": false
                 }, {
                     // attr idx: 15
                     data: "attr",
@@ -167,6 +194,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                         html.push("</ul>");
                         return html.join("");
                     }
+                    ,"orderable": false
                 }, {
                     // type idx: 16
                     data: "type",
@@ -177,14 +205,36 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                         }
                         return data || "-";
                     }
+                    ,"orderable": false
                 }]
             });
 
-            table.on( 'draw', function (e) {
+            table.on( 'draw', function (e, settings) {
+                var rows = table.rows({
+                    page: 'current'
+                }).nodes();
+                var last = null;
 
+                table.column(0, {
+                    page: 'current'
+                }).data().each(function(group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before('<tr class="group"><td colspan="15">流ID: ' + group + '</td></tr>');
+                        last = group;
+                    }
+                });
             }).on('init', function() {
                 // 隐藏type栏
                 table.column(16).visible(false);
+            });
+
+            $('.vh-table-duplicate-stream tbody').on('click', 'tr.group', function() {
+                var currentOrder = table.order()[0];
+                if (currentOrder[0] === 0 && currentOrder[1] === 'asc') {
+                    table.order([0, 'desc']).draw();
+                } else {
+                    table.order([0, 'asc']).draw();
+                }
             });
         }
 
