@@ -196,10 +196,10 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                     }
                     ,"orderable": false
                 }, {
-                    // type idx: 16
-                    data: "type",
+                    // flag idx: 16
+                    data: "flag",
                     render: function (data, type, row, meta) {
-                        if (data == 4) {
+                        if (data == "bad") {
                             var tr = table.row(meta.row).node();
                             $(tr).addClass("danger-bg");
                         }
