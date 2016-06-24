@@ -1,0 +1,41 @@
+//-
+   Created by shen on 2016/6/23.
+
+extends _main
+
+block title
+    title 视频截图
+
+//- 引入 模态对话框
+//- include _modal
+
+block css
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/monitor.css")
+    style.
+        @media only screen and (min-width: 1200px) {
+            .ui.grid.container {
+                width: 100%!important;
+            }
+        }
+        #container {
+            background-image: url(./images/bg/bg-3.jpg);
+        }
+        div.ui.segment {
+
+        }
+
+block content
+    div.ui.main.container.raised.segment#container.vh-container
+        h2(class="ui header vh-table")
+            i(class="photo icon")
+            div(class="content") 视频截图
+
+        div.ui.grid.container.vh-monitor-gallery._3d
+
+    script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_gallery")
+    script.
+        function imgError(o) {
+            o.src = "images/white-image.png";
+        }

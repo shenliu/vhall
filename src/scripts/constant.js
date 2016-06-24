@@ -293,6 +293,7 @@ define(function () {
 
             monitor_log_search: host + "search?streamid={id}&hostname={host}&mod={mod}&code={code}&day={date}&timestart={start}&timeend={end}",
             monitor_duplicate_stream: host + "stream_badpush",
+            monitor_gallery: host + "stream_photo",
 
             monitor_get_streams: host + "get_stream",
             monitor_get_hosts: host + "get_host"
