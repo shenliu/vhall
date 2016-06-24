@@ -43,15 +43,15 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
 
     $(function() {
         _init();
-        setInterval(_animateIt, 10000);
+        setInterval(_animateIt, 2000);
     });
 
     function _init() {
         T.xhr_get(C.url.monitor_gallery, function(data, textStatus, jqXHR) {
             var html = [];
             $(data).each(function(idx, elem) {
-                html.push('<div class="two wide column">');
-                html.push('<div class="ui segment" data-id="', elem["streamid"] ,'">');
+                html.push('<div class="two wide column vh-gallery-img-box">');
+                html.push('<div class="ui vh-gallery-img-box-inner" data-id="', elem["streamid"] ,'">');
                 html.push('<img class="ui medium image" src="', elem["attr"]["_m"]["url"], '" onerror="imgError(this);" />');
                 html.push('</div>');
                 html.push('<span>', elem["streamid"], '</span>');
@@ -72,7 +72,6 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
             ids.push($(v).attr("data-id"));
         });
         T.xhr_get(C.url.monitor_gallery, function(data, textStatus, jqXHR) {
-
             $(data).each(function(idx, elem) {
                 var streamID = elem["streamid"];
                 var dom = box.find("[data-id='" + streamID + "']");
@@ -88,22 +87,21 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                     if (img.attr("src") !== url) { // 图片改变了 才换
                         var random = T.random(0, 3);
                         var animation = "animated " + rotation[random]; // 旋转style
-                        dom.parent(".wide.column").addClass(animation);
+                        dom.parent(".vh-gallery-img-box").addClass(animation);
                         window.setTimeout(function () {
                             return function () {
                                 img.attr("src", url);
-                                //dom.next().html(elem["streamid"]);
                             };
                         } (), 0);
 
-                        dom.parent(".wide.column").on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function() {
+                        dom.parent(".vh-gallery-img-box").on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function() {
                             $(this).removeClass(animation);
                         });
                     }
                 } else {
                     var html = [];
-                    html.push('<div class="two wide column">');
-                    html.push('<div class="ui segment" data-id="', elem["streamid"] ,'">');
+                    html.push('<div class="two wide column vh-gallery-img-box">');
+                    html.push('<div class="ui vh-gallery-img-box-inner" data-id="', elem["streamid"] ,'">');
                     html.push('<img class="ui medium image" src="', elem["attr"]["_m"]["url"], '" onerror="imgError(this);" />');
                     html.push('</div>');
                     html.push('<span>', elem["streamid"], '</span>');
@@ -111,7 +109,7 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                     box.append(html.join(""));
                     window.setTimeout(function () {
                         return function () {
-                            box.find("[data-id='" + streamID + "']").parent(".wide.column").addClass("animated-move rubberBand").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                            box.find("[data-id='" + streamID + "']").parent(".vh-gallery-img-box").addClass("animated-move rubberBand").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
                                 $(this).removeClass("animated-move rubberBand");
                             });
                         };
@@ -126,7 +124,7 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                     var dom = box.find("[data-id='" + elem + "']");
                     window.setTimeout(function () {
                         return function () {
-                            dom.parent(".wide.column").addClass("animated-move hinge").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                            dom.parent(".vh-gallery-img-box-inner").addClass("animated-move hinge").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
                                 $(this).removeClass("animated-move hinge");
                                 $(this).remove();
                             });
