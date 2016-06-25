@@ -1,5 +1,5 @@
 /**
- * Created by shen on 2016/6/16.
+ * Created by shen on 2016/6/23.
  */
 
 require.config({
@@ -11,35 +11,19 @@ require.config({
         'semantic': {
             deps: ['jquery'],
             exports: 'semantic'
-        },
-
-        'dataTable': {
-            deps: ['jquery'],
-            exports: 'dataTable'
-        },
-
-        'fixedCol': {
-            deps: ['dataTable'],
-            exports: 'fixedCol'
-        },
-
-        'mscroll': {
-            deps: ['jquery'],
-            exports: 'mscroll'
         }
     },
     paths: {
         "jquery": "../../node_modules/jquery/dist/jquery.min",
         "semantic": "../semantic/semantic.min",
-        "dataTable": "./3rd/jquery.dataTables",
-        "mscroll": "./3rd/mobiscroll.custom-3.0.0.min",
-        "underscore": "../../node_modules/underscore/underscore-min",
-        "echarts": "../../node_modules/echarts/dist/echarts.min"
+        "underscore": "../../node_modules/underscore/underscore-min"
     }
 });
 
 require(['jquery', 'semantic', 'underscore', './constant', './tool'],
     function($, semantic, _, C, T) {
+
+    var rotation = ['flipped-vertical-bottom', 'flipped-vertical-top', 'flipped-horizontal-left', 'flipped-horizontal-right'];
 
     $(function() {
         _init();
@@ -48,21 +32,25 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
 
     function _init() {
         T.xhr_get(C.url.monitor_gallery, function(data, textStatus, jqXHR) {
-            var html = [];
+            var html = [],
+                imgs = [];
             $(data).each(function(idx, elem) {
                 html.push('<div class="two wide column vh-gallery-img-box">');
                 html.push('<div class="ui vh-gallery-img-box-inner" data-id="', elem["streamid"] ,'">');
-                html.push('<img class="ui medium image" src="', elem["attr"]["_m"]["url"], '" onerror="imgError(this);" />');
+                //html.push('<img class="ui medium image" src="', elem["attr"]["_m"]["url"], '" onerror="imgError(this);" />');
+                imgs.push(elem["attr"]["_m"]["url"]);
                 html.push('</div>');
                 html.push('<span>', elem["streamid"], '</span>');
                 html.push('</div>');
             });
-            $(".ui.grid").html(html.join(""));
+            var grid = $(".ui.grid");
+            grid.html(html.join(""));
+            grid.find(".vh-gallery-img-box-inner").each(function(idx, elem) {
+                _addImg(imgs[idx], $(elem));
+            });
         }, null);
 
     }
-
-    var rotation = ['flipped-vertical-bottom', 'flipped-vertical-top', 'flipped-horizontal-left', 'flipped-horizontal-right'];
 
     function _animateIt() {
         var box = $(".vh-monitor-gallery");
@@ -92,21 +80,26 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                             return function () {
                                 img.attr("src", url);
                             };
-                        } (), 0);
+                        } (), 500);
 
                         dom.parent(".vh-gallery-img-box").on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function() {
                             $(this).removeClass(animation);
                         });
                     }
                 } else {
-                    var html = [];
+                    var html = [], _img;
                     html.push('<div class="two wide column vh-gallery-img-box">');
                     html.push('<div class="ui vh-gallery-img-box-inner" data-id="', elem["streamid"] ,'">');
-                    html.push('<img class="ui medium image" src="', elem["attr"]["_m"]["url"], '" onerror="imgError(this);" />');
+                    //html.push('<img class="ui medium image" src="', elem["attr"]["_m"]["url"], '" onerror="imgError(this);" />');
+                    _img = elem["attr"]["_m"]["url"];
                     html.push('</div>');
                     html.push('<span>', elem["streamid"], '</span>');
                     html.push('</div>');
                     box.append(html.join(""));
+                    box.find(".vh-gallery-img-box-inner").eq(-1).each(function(idx, elem) {
+                        _addImg(_img, $(elem));
+                    });
+
                     window.setTimeout(function () {
                         return function () {
                             box.find("[data-id='" + streamID + "']").parent(".vh-gallery-img-box").addClass("animated-move rubberBand").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
@@ -124,15 +117,44 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                     var dom = box.find("[data-id='" + elem + "']");
                     window.setTimeout(function () {
                         return function () {
-                            dom.parent(".vh-gallery-img-box-inner").addClass("animated-move hinge").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-                                $(this).removeClass("animated-move hinge");
-                                $(this).remove();
+                            dom.parent(".vh-gallery-img-box").addClass("animated-move hinge").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                                $(this).removeClass("animated-move hinge").remove();
                             });
                         };
                     } (), 500);
                 });
             }
         }, null);
+    }
+
+    function _addImg(src, dom) {
+        var maxH = 150;
+        var img = new Image();
+        img.className = "ui medium image";
+        img.src = src;
+        img.onload = function () {
+            var imgW = img.width;
+            var imgH = img.height;
+            var w = dom.width(), h;
+
+            if (imgW < imgH) {
+                h = maxH;
+                w = imgW * maxH / imgH;
+            } else {
+                h = imgH * w / imgW;
+                if (h > maxH) {
+                    h = maxH;
+                    w = imgW * maxH / imgH;
+                }
+            }
+            $(img).width(w).height(h);
+            dom.height(h);
+            dom.append(img);
+        };
+        img.onerror = function() {
+            imgError(this);
+        };
+
     }
 
 });
