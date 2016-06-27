@@ -263,7 +263,14 @@ define(function () {
             '204303': 'input/output error',
             '204304': 'file or directory not found',
             '204306': 'operation failed',
-            '204307': 'ailed to resolve address'
+            '204307': 'ailed to resolve address',
+
+            '232101': '转换服务启动',
+            '232001': '成功收到任务',
+            '232011': '转换任务开始',
+            '232002': '转换任务完成',
+            '234001': '接收任务失败',
+            '234011': '转换任务失败'
         },
 
         tableLocale: {
