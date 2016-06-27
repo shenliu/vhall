@@ -59,14 +59,14 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             var series = [];
             $.each(_datas, function(k, v) {
                 series.push({
-                    name: C.modules[k],
+                    name: C.modulesAll[k],
                     type: "bar",
                     stack: '总量',
                     data: v
                 });
             });
             var legend = _.map(_.keys(_datas), function(i) {
-                return C.modules[i];
+                return C.modulesAll[i];
             });
             var dom = $(".vh-error-stat-overview")[0];
             var axis = _.keys(errorStatData);
@@ -153,12 +153,15 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 $(".vh-error-stat-header-pie").html("一天数据");
 
                 var dom = $('.vh-error-stat-modules-' + k)[0];
-                var instance = E.getInstanceByDom(dom);
-                if (instance) {
-                    instance.dispose();
+                if (dom) {
+                    var instance = E.getInstanceByDom(dom);
+                    if (instance) {
+                        instance.dispose();
+                    }
+
+                    monitor_error_modules_graph(dom, legend, series);
                 }
 
-                monitor_error_modules_graph(dom, legend, series);
             });
             
         });
