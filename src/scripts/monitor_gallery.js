@@ -117,7 +117,7 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                     window.setTimeout(function () {
                         return function () {
                             box.find("[data-id='" + streamID + "']").parent(".vh-gallery-img-box").addClass("animated-move rubberBand").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-                                $(this).removeClass("animated-move rubberBand");
+                                $(this).removeClass("animated-move rubberBand")[0].scrollIntoView();
                             });
                         };
                     } (), 500);
