@@ -27,7 +27,7 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
 
     $(function() {
         _init();
-        setInterval(_animateIt, 2000);
+        setInterval(_animateIt, 15000);
     });
 
     function _init() {
@@ -137,16 +137,8 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
             var imgH = img.height;
             var w = dom.width(), h;
 
-            if (imgW < imgH) {
-                h = maxH;
-                w = imgW * maxH / imgH;
-            } else {
-                h = imgH * w / imgW;
-                if (h > maxH) {
-                    h = maxH;
-                    w = imgW * maxH / imgH;
-                }
-            }
+            h = maxH;
+            w = imgW * h / imgH;
             $(img).width(w).height(h);
             dom.height(h);
             dom.append(img);
