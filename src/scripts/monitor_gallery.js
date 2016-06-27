@@ -25,7 +25,14 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
 
     var rotation = ['flipped-vertical-bottom', 'flipped-vertical-top', 'flipped-horizontal-left', 'flipped-horizontal-right'];
 
+    var showYolo = false;
+
     $(function() {
+        // 排除yolo
+        var search = location.search;
+        if (search === "?yolo") {
+            showYolo = true;
+        }
         _init();
         setInterval(_animateIt, 15000);
     });
@@ -35,8 +42,12 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
             var html = [],
                 imgs = [];
             $(data).each(function(idx, elem) {
+                var streamID = elem["streamid"];
+                if (streamID.length > 9 && !showYolo) {
+                    return true;
+                }
                 html.push('<div class="two wide column vh-gallery-img-box">');
-                html.push('<div class="ui vh-gallery-img-box-inner" data-id="', elem["streamid"] ,'">');
+                html.push('<div class="ui vh-gallery-img-box-inner" data-id="', streamID ,'">');
                 //html.push('<img class="ui medium image" src="', elem["attr"]["_m"]["url"], '" onerror="imgError(this);" />');
                 imgs.push(elem["attr"]["_m"]["url"]);
                 html.push('</div>');
@@ -88,6 +99,9 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                     }
                 } else {
                     var html = [], _img;
+                    if (streamID.length > 9 && !showYolo) {
+                        return true;
+                    }
                     html.push('<div class="two wide column vh-gallery-img-box">');
                     html.push('<div class="ui vh-gallery-img-box-inner" data-id="', elem["streamid"] ,'">');
                     //html.push('<img class="ui medium image" src="', elem["attr"]["_m"]["url"], '" onerror="imgError(this);" />');
