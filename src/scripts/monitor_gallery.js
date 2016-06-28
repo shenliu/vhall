@@ -28,9 +28,9 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
     var showYolo = false;
 
     $(function() {
-        // 排除yolo
-        var search = location.search;
-        if (search === "?yolo") {
+        // 识别yolo
+        var path = location.pathname;
+        if (path.indexOf("yolo") !== -1) {
             showYolo = true;
         }
         _init();
@@ -43,7 +43,10 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                 imgs = [];
             $(data).each(function(idx, elem) {
                 var streamID = elem["streamid"];
-                if (streamID.length > 9 && !showYolo) {
+                if (showYolo && streamID.length <= 9 ) {
+                    return true;
+                }
+                if (!showYolo && streamID.length > 9) {
                     return true;
                 }
                 html.push('<div class="two wide column vh-gallery-img-box">');
@@ -99,7 +102,10 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                     }
                 } else {
                     var html = [], _img;
-                    if (streamID.length > 9 && !showYolo) {
+                    if (showYolo && streamID.length <= 9 ) {
+                        return true;
+                    }
+                    if (!showYolo && streamID.length > 9) {
                         return true;
                     }
                     html.push('<div class="two wide column vh-gallery-img-box">');

@@ -217,6 +217,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             }]
         });
 
+        // 表格事件
         table.on( 'draw', function (e) {
             monitor_table_event_list_details();
             monitor_table_event_show_stream();
@@ -277,12 +278,13 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 var id = target.attr("data-id");
                 switch(id) {
                     case "1": // 过滤结束流
+                        table.column(9).order("desc"); // 按<移动>列降序排列
                         _setFilter(4, "text", 5, "结束");
-                        _filter(table, false);
+                        _filter(table, true); // 组合查询
                         break;
                     case "2": // 流ID大于10的
                         _setFilter("0", "length", 3, 10);
-                        _filter(table, false);
+                        _filter(table, true); // 组合查询
                         break;
                     default:
                         break;
@@ -784,6 +786,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 var suffix = domain.startsWith("cn") ? "/livestream.m3u8" : "/index.m3u8";
                 hash = ["http://", domain, "/vhall/", id, suffix];
                 url = './player/jwp.html#' + hash.join("");
+            } else {
+                return;
             }
 
             $(".ui.modal.vh-modal-player")
