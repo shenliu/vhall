@@ -174,7 +174,64 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
         $(document).on("click", ".vh-gallery-img-box", function(e) {
             var target = $(e.currentTarget);
             var id = target.find("span").html();
-            window.open("./monitor_stream.html?id=" + id, "newWin");
+            //window.open("./monitor_stream.html?id=" + id, "newWin");
+
+            T.xhr_get(C.url.monitor_stream, function(data) {
+                var obj = undefined;
+                $(data).each(function(idx, elem) {
+                    if (elem["streamid"] === id) {
+                        obj = elem;
+                        return false;
+                    }
+                });
+                if (!obj) return;
+                var o = obj["alluser"];
+                var keys;
+                if (!$.isEmptyObject(o["flash_cdn"])) {
+                    keys = _.keys(o["flash_cdn"]);
+                } else if (!$.isEmptyObject(o["mobile_cdn"])){
+                    keys = _.keys(o["mobile_cdn"]);
+                }
+
+                if (keys && keys.length) {
+                    var domain = keys[0];
+                    var hash, url;
+
+                    if (domain.indexOf("rtmp") !== -1) { // rtmp
+                        // 格式: rtmp://domain/vhall/id
+                        hash = ["rtmp://", domain, "/vhall/", id];
+                        url = './player/srs.html#' + hash.join("");
+                    } else if (domain.indexOf("hls") !== -1) { // hls
+                        // 格式: http://cn_domain/vhall/id/livestream.m3u8
+                        // 格式: http://cc_domain/vhall/id/index.m3u8
+                        var suffix = domain.startsWith("cn") ? "/livestream.m3u8" : "/index.m3u8";
+                        hash = ["http://", domain, "/vhall/", id, suffix];
+                        url = './player/jwp.html#' + hash.join("");
+                    } else {
+                        return;
+                    }
+
+                    if (url) {
+                        $(".ui.modal.vh-modal-player")
+                            .modal({
+                                closable: true,
+                                onShow: function() {
+                                    $('.ui.embed').embed({
+                                        url: encodeURI(url)
+                                    });
+                                },
+                                onHide: function() {
+                                    var ifr = $("iframe")[0];
+                                    ifr.contentWindow.player_stop();
+                                    $('.ui.embed').find(".embed").remove();
+                                }
+                            })
+                            .modal('setting', 'transition', "swing up")
+                            .modal('show').modal("refresh");
+                    }
+                }
+
+            }, null);
         });
     }
 });

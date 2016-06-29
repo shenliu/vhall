@@ -7,7 +7,7 @@ block title
     title 视频截图(Yolo)
 
 //- 引入 模态对话框
-//- include _modal
+include _modal
 
 block css
     link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
@@ -33,6 +33,9 @@ block content
             div(class="content") 视频截图(Yolo)
 
         div.ui.grid.container.vh-monitor-gallery._3d
+
+    +modal('vh-modal-player large', '播放', true, false, true)
+        include _embed
 
     script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_gallery")
     script.

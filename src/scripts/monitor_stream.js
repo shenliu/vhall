@@ -53,7 +53,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
        }
      */
     var streamData = {};
-    var _searchStream = false; // 是否有参数传来 ?id=xxxxxx
 
     // init
     $(function() {
@@ -250,7 +249,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
         table.on( 'draw', function (e) {
             monitor_table_event_list_details();
             monitor_table_event_show_stream();
-            _playStream(table);
         }).on('init', function() {
             var tpl = _.template($("#tpl_table_toolbar").html());
             var toolbar = $(".vh-table-toolbar").eq(0);
@@ -328,8 +326,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 table.draw();
             });
 
-            // 从其他页面是否传来了streamID和类型
-            _hasStream(table);
         });
     }
 
@@ -1089,7 +1085,6 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
         myChart.setOption(option);
     }
 
-
     /**
      * 汇总统计图
      * @param dom
@@ -1192,42 +1187,5 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
         };
 
         myChart.setOption(option);
-    }
-
-
-    /**
-     * 当有参数id=xxxx传入时 播放stream
-     * _hasStream 和 _playStream (draw回调函数)
-     * @param table
-     * @private
-     */
-    function _hasStream(table) {
-        var search = location.search.trim();
-        if (search != "") {
-            var id = search.slice("?id=".length);
-
-            if (id == "") return;
-
-            _searchStream = id;
-
-            table.search(id).draw();
-        }
-    }
-
-    function _playStream(table) {
-        if (_searchStream) {
-            var r = table.columns(0).rows(function(idx, data, node) {
-                return $(node).find("td").eq(0).html() == _searchStream;
-            });
-            if (r[0][0]) {
-                var $dom = $(table.row(r[0][0]).node());
-                var items = $dom.find(".vh-error-collect").find(".item");
-                if (items.length > 1) {
-                    items = $(items[1]);
-                }
-                items.trigger("click");
-            }
-            _searchStream = false;
-        }
     }
 });
