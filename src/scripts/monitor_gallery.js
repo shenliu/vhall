@@ -171,10 +171,49 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
     }
 
     function _event() {
+        $(document).on("mouseover", ".vh-gallery-img-box", function(e) {
+            var img = $(e.currentTarget).find("img");
+            var w = img.width(),
+                h = img.height(),
+                left = parseFloat(img.css("left")),
+                top = parseFloat(img.css("top"));
+            var already = img.attr("data-w");
+            if (!already) {
+                img.attr("data-w", w);
+                img.attr("data-h", h);
+                img.attr("data-l", left);
+                img.attr("data-t", top);
+            } else {
+                w = img.attr("data-w");
+                h = img.attr("data-h");
+                left = img.attr("data-l");
+                top = img.attr("data-t");
+            }
+
+            var _w = (200 * w / h);
+            img.stop().animate({
+                width: (_w) + "px",
+                height: "200px",
+                top: (top - 25) + "px"
+                //left: (left - _w / 2) + "px"
+            });
+        }).on("mouseout", ".vh-gallery-img-box", function(e) {
+            var img = $(e.currentTarget).find("img");
+            var w = img.attr("data-w"),
+                h = img.attr("data-h"),
+                left = img.attr("data-l"),
+                top = img.attr("data-t");
+            img.stop().animate({
+                width: (w) + "px",
+                height: (h) + "px",
+                top: (top) + "px"
+                //left: (left) + "px"
+            });
+        });
+
         $(document).on("click", ".vh-gallery-img-box", function(e) {
             var target = $(e.currentTarget);
             var id = target.find("span").html();
-            //window.open("./monitor_stream.html?id=" + id, "newWin");
 
             T.xhr_get(C.url.monitor_stream, function(data) {
                 var obj = undefined;
