@@ -116,6 +116,10 @@ gulp.task('buildlib', function() {
         .pipe(plugins.replace('semantic/semantic.min.css', 'css/3rd/semantic/semantic.min.css'))
         .pipe(gulp.dest(dist_path));
 
+    gulp.src(dist_path + 'monitor_gallery_yolo.html')
+        .pipe(plugins.replace('semantic/semantic.min.css', 'css/3rd/semantic/semantic.min.css'))
+        .pipe(gulp.dest(dist_path));
+
     //--------------------------images-----------------------------------
 
     gulp.src('./src/images/**')

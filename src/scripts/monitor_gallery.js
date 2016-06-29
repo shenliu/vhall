@@ -35,6 +35,7 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
         }
         _init();
         setInterval(_animateIt, 15000);
+        _event();
     });
 
     function _init() {
@@ -169,4 +170,11 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
 
     }
 
+    function _event() {
+        $(document).on("click", ".vh-gallery-img-box", function(e) {
+            var target = $(e.currentTarget);
+            var id = target.find("span").html();
+            window.open("./monitor_stream.html?id=" + id, "newWin");
+        });
+    }
 });
