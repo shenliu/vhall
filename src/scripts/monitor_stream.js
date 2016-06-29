@@ -68,11 +68,31 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
         var template = _.template($("#tpl_td_list").html());
 
         // 自定义sort
-        $.fn.dataTable.ext.order['dom-error-number'] = function  ( settings, col ) {
+        $.fn.dataTable.ext.order['dom-error-number'] = function( settings, col ) {
             return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
                 var dom = $(td).find('.vh-td-error-number');
                 if (dom.length > 0) {
                     return dom[0].innerHTML * 1;
+                } else {
+                    return 0;
+                }
+            } );
+        };
+
+        $.fn.dataTable.ext.order['dom-user-number'] = function( settings, col ) {
+            return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                return $(td).find("a")[0].innerHTML * 1;
+            } );
+        };
+
+        $.fn.dataTable.ext.order['dom-collect-number'] = function( settings, col ) {
+            return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                var a = $(td).find("a");
+                if (a.length) {
+                    a = a[0].innerHTML;
+                    var offset = a.lastIndexOf("/");
+                    var n = a.slice(offset + 1);
+                    return n * 1;
                 } else {
                     return 0;
                 }
@@ -185,6 +205,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 }
             }, {
                 // 移动 idx: 9
+                orderDataType: "dom-collect-number",
+                type: "numeric",
                 data: "baduser.mobile_cdn",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -194,6 +216,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 }
             }, {
                 // Flash idx: 10
+                orderDataType: "dom-collect-number",
+                type: "numeric",
                 data: "baduser.flash_cdn",
                 render: function (data, type, row, meta) {
                     if (data) {
@@ -203,6 +227,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 }
             }, {
                 // 卡顿用户数 idx: 11
+                orderDataType: "dom-user-number",
+                type: "numeric",
                 data: "baduser.user",
                 render: function(data, type, row, meta) {
                     var dom = ["<a class='vh-summery-count-each vh-block' data-id='", row["streamid"], "' href='###'>", data, "</a>"];
@@ -210,6 +236,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 }
             }, {
                 // 用户总数 idx: 12
+                orderDataType: "dom-user-number",
+                type: "numeric",
                 data: "alluser.user",
                 render: function(data, type, row, meta) {
                     var dom = ["<a class='vh-summery-count-each vh-block' data-id='", row["streamid"], "' href='###'>", data, "</a>"];
