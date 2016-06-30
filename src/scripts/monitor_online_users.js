@@ -28,16 +28,20 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     function($, semantic, _, E, C, T) {
 
     var EACH_LINE = 6; // 每行6个
+    var MAP = {
+        1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
+        6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten"
+    };
 
     // init
     $(function() {
-        monitor_online_users_overview();
+        monitor_online_users();
     });
 
     /**
      *  第一个pie图 总览图 组织数据
      */
-    function monitor_online_users_overview() {
+    function monitor_online_users() {
         var datas = [];
         T.xhr_get(C.url.monitor_online_users, function(data, textStatus, jqXHR) {
             var cdn = data["cdn"];
@@ -68,7 +72,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             var html = [],
                 n = 0;
             for (var i = 0; i < lines; i++) {
-                html.push('<div class="six column row divided">');
+                html.push('<div class="' + MAP[EACH_LINE] + ' column row divided">');
                 for (var j = 0; j < EACH_LINE; j++) {
                     html.push('<div class="column">');
                     html.push('<h5 class="ui header"></h5>');
@@ -119,7 +123,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
             }
         });
         dom = $(obj["dom"]);
-        _graph(dom[0], legend, series);
+        alluser && _graph(dom[0], legend, series);
 
         dom.prev(".ui.header").html(obj["name"] + " (" + baduser + "/" + alluser + ")"); // h5 标题
     }

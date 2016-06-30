@@ -384,8 +384,6 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 })
                 .modal('setting', 'transition', "swing right")
                 .modal('show').modal("refresh");
-
-            //window.open(encodeURI(url), "_blank");
         });
     }
 });

@@ -362,7 +362,7 @@ require(['jquery', 'semantic', 'dataTable', 'mscroll', 'underscore', './constant
             bar.find(".ui.dropdown.vh-search-id").dropdown("set selected", id);
         }
 
-        if (host) {
+        if (host && host != "None") {
             bar.find(".ui.dropdown.vh-search-host").dropdown("set selected", host);
         }
 
