@@ -233,7 +233,7 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                 }
 
                 if (keys && keys.length) {
-                    var domain = keys[0];
+                    var domain = keys[1] ? keys[1] : keys[0];
                     var hash, url;
 
                     if (domain.indexOf("rtmp") !== -1) { // rtmp

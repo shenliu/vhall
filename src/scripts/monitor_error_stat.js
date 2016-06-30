@@ -119,11 +119,12 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     }
 
     /**
-     *  7个饼图
+     *  8个饼图
      */
     function monitor_error_oneday() {
         T.xhr_get(C.url.monitor_error_stat_oneday, function(data, textStatus, jqXHR) {
             $.each(data, function(k, v) { // k: 1, 2, 11, 12, ... v: {14002: 29, ...}
+                console.log(k, v);
                 var name = C.modules[k];
                 var legend = [], vals = [], series = [];
                 $.each(v, function(i, j) { // i: 14002  j: 29
@@ -175,7 +176,6 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
         myChart.on("click", function(params) {
             var time = params.name;
             var data = errorStatData[time];
-            console.log(data);
             // data -> {1: {14002: 29, ...}, 2: Object, 11: Object, 12: Object, 13: Object, 14: Object, 20: Object}
             $.each(data, function(k, v) { // k: 1, 2, 11, 12, ... v: {14002: 29, ...}
                 var name = C.modules[k];
@@ -225,7 +225,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     }
 
     /**
-     * 七个饼状图
+     * 八个饼状图
      * @param dom
      * @param legend
      * @param series
