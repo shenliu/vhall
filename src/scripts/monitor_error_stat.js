@@ -124,7 +124,6 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     function monitor_error_oneday() {
         T.xhr_get(C.url.monitor_error_stat_oneday, function(data, textStatus, jqXHR) {
             $.each(data, function(k, v) { // k: 1, 2, 11, 12, ... v: {14002: 29, ...}
-                console.log(k, v);
                 var name = C.modules[k];
                 var legend = [], vals = [], series = [];
                 $.each(v, function(i, j) { // i: 14002  j: 29

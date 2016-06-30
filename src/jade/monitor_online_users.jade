@@ -1,0 +1,25 @@
+//-
+   Created by shen on 2016/6/30.
+
+extends _main
+
+block title
+    title 在线用户
+
+//- 引入 模态对话框
+//- include _modal
+
+block css
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/monitor.css")
+
+block content
+    div.ui.main.container.raised.segment#container.vh-container
+        h2(class="ui header")
+            i(class="users icon")
+            div(class="content") 在线用户
+
+        div.ui.vertically.divided.grid.vh-online-users-box
+
+    script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_online_users")
