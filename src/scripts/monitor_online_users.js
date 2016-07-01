@@ -111,7 +111,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
         series.push({
             name: obj["name"],
             type: 'pie',
-            radius : '50%',
+            radius : '60%',
             center: ['50%', '60%'],
             data: vals,
             itemStyle: {
@@ -142,13 +142,19 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 trigger: 'item',
                 formatter: "{a} <br/>{b} : {c} ({d}%)"
             },
+            color: ['#2f4554', '#c23531'],
             legend: {
-                orient: 'vertical',
+                //orient: 'vertical',
                 left: 'left',
                 data: legend
             },
             series: series
         };
+
+        if ($(dom).hasClass("vh-online-users-0")) {
+            option["color"] = ['#2b821d', '#cda819'];
+        }
+
         myChart.setOption(option);
     }
 });

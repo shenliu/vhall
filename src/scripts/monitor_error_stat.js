@@ -327,6 +327,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 curModule = _.invert(C.modules)[module]; // 当前的模块id
                 curCode = code;
                 monitor_error_overview_graph(dom, times, legend, series, monitor_error_host_event);
+                dom.scrollIntoView();
             }, null);
         });
     }
