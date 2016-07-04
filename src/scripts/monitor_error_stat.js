@@ -124,7 +124,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     function monitor_error_oneday() {
         T.xhr_get(C.url.monitor_error_stat_oneday, function(data, textStatus, jqXHR) {
             $.each(data, function(k, v) { // k: 1, 2, 11, 12, ... v: {14002: 29, ...}
-                var name = C.modules[k];
+                var name = C.modules[k], sum = 0;
                 var legend = [], vals = [], series = [];
                 $.each(v, function(i, j) { // i: 14002  j: 29
                     var _s = i + " " + C.message[i];
@@ -133,6 +133,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                         value: j,
                         name: _s
                     });
+                    sum += j;
                 });
 
                 series.push({
@@ -158,7 +159,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                     if (instance) {
                         instance.dispose();
                     }
-
+                    $(dom).prev("h5").html($(dom).prev("h5").html() + " (" + sum + ")"); // 统计各个总数
                     monitor_error_modules_graph(dom, legend, series);
                 }
 

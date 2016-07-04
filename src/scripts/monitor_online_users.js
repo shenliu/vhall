@@ -35,6 +35,17 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
 
     // init
     $(function() {
+        var search = location.search.slice(1);
+        var col = parseInt(search, 10);
+        if (!isNaN(col)) {
+            if (col < 1) {
+                col = 1;
+            }
+            if (col > 10) {
+                col = 10;
+            }
+            EACH_LINE = col;
+        }
         monitor_online_users();
     });
 
@@ -67,7 +78,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
                 datas.push(o);
             });
 
-            var lines = Math.ceil(total / EACH_LINE); // 需要几行 每行6个
+            var lines = Math.ceil(total / EACH_LINE); // 需要几行 每行EACH_LINE个
 
             var html = [],
                 n = 0;
