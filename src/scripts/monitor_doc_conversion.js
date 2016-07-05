@@ -92,9 +92,13 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                     data: "234001",
                     render: function (data, type, row, meta) {
                         var html = ["<ul>"];
-                        $.isPlainObject(data) && $.each(data, function(k, v) {
-                            html.push('<li>', k, ": ", v, '</li>');
-                        });
+                        if ($.isPlainObject(data)) {
+                            $.each(data, function(k, v) {
+                                html.push('<li>', k, ": ", v, '</li>');
+                            });
+                            var tr = table.row(meta.row).node();
+                            $(tr).addClass("danger-bg");
+                        }
                         html.push("</ul>");
                         return html.join("");
                     }
@@ -103,9 +107,13 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                     data: "234011",
                     render: function (data, type, row, meta) {
                         var html = ["<ul>"];
-                        $.isPlainObject(data) && $.each(data, function(k, v) {
-                            html.push('<li>', k, ": ", v, '</li>');
-                        });
+                        if ($.isPlainObject(data)) {
+                            $.each(data, function(k, v) {
+                                html.push('<li>', k, ": ", v, '</li>');
+                            });
+                            var tr = table.row(meta.row).node();
+                            $(tr).addClass("danger-bg");
+                        }
                         html.push("</ul>");
                         return html.join("");
                     }
