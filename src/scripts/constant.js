@@ -316,6 +316,7 @@ define(function () {
             monitor_duplicate_stream: host + "stream_badpush",
             monitor_gallery: host + "stream_photo",
             monitor_online_users: host + "streaminfo",
+            monitor_doc_conversion: host + "get_doc",
 
             monitor_get_streams: host + "get_stream",
             monitor_get_hosts: host + "get_host"

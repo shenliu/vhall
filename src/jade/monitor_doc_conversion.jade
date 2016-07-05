@@ -1,0 +1,45 @@
+//
+   Created by shen on 2016/7/5.
+
+extends _main
+
+block title
+    title 文档转换
+
+//- 引入 模态对话框
+//- include _modal
+
+block css
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="semantic/semantic.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/3rd/jquery.dataTables.min.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/common.css")
+    link(rel="stylesheet", type="text/css", property='stylesheet', href="css/monitor.css")
+
+block content
+    div.ui.main.container.raised.segment#container.vh-container
+        h2(class="ui header vh-table")
+            i(class="copy icon")
+            div(class="content") 文档转换
+
+        table.ui.table.striped.celled.display.nowrap.compact.dataTable(cellspacing='0', width='100%')
+            thead
+                tr
+                    th ID
+                    th 转换服务启动
+                    th 成功收到任务
+                    th 转换任务开始
+                    th 转换任务完成
+                    th 接收任务失败
+                    th 转换任务失败
+            tfoot
+                tr
+                    th ID
+                    th 转换服务启动
+                    th 成功收到任务
+                    th 转换任务开始
+                    th 转换任务完成
+                    th 接收任务失败
+                    th 转换任务失败
+            tbody
+
+    script(src="scripts/3rd/require.js",defer="defer",async="async",data-main="scripts/monitor_doc_conversion")
