@@ -209,9 +209,7 @@ require(['jquery', 'semantic', 'underscore', './constant', './tool'],
                 top: (top) + "px"
                 //left: (left) + "px"
             });
-        });
-
-        $(document).on("click", ".vh-gallery-img-box", function(e) {
+        }).on("click", ".vh-gallery-img-box", function(e) {
             var target = $(e.currentTarget);
             var id = target.find("span").html();
 

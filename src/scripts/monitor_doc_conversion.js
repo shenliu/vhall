@@ -95,31 +95,43 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                     // 234001 接收任务失败 idx: 6
                     data: "234001",
                     render: function (data, type, row, meta) {
-                        var html = ["<ul>"];
-                        if ($.isPlainObject(data)) {
+                        if (typeof data == "object") {
+                            var html = ["<ul>"];
                             $.each(data, function(k, v) {
                                 html.push('<li>', k, ": ", v, '</li>');
                             });
                             var tr = table.row(meta.row).node();
                             $(tr).addClass("danger-bg");
+                            html.push("</ul>");
+                            return html.join("");
+                        } else if (typeof data == "string" && data != "-") {
+                            tr = table.row(meta.row).node();
+                            $(tr).addClass("danger-bg");
+                            return data;
+                        } else {
+                            return "-";
                         }
-                        html.push("</ul>");
-                        return html.join("");
                     }
                 }, {
                     // 234011 转换任务失败 idx: 7
                     data: "234011",
                     render: function (data, type, row, meta) {
-                        var html = ["<ul>"];
-                        if ($.isPlainObject(data)) {
+                        if (typeof data == "object") {
+                            var html = ["<ul>"];
                             $.each(data, function(k, v) {
                                 html.push('<li>', k, ": ", v, '</li>');
                             });
                             var tr = table.row(meta.row).node();
                             $(tr).addClass("danger-bg");
+                            html.push("</ul>");
+                            return html.join("");
+                        } else if (typeof data == "string" && data != "-") {
+                            tr = table.row(meta.row).node();
+                            $(tr).addClass("danger-bg");
+                            return data;
+                        } else {
+                            return "-";
                         }
-                        html.push("</ul>");
-                        return html.join("");
                     }
                 }]
             });
