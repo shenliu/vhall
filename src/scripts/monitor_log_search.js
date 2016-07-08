@@ -219,7 +219,7 @@ require(['jquery', 'semantic', 'dataTable', 'mscroll', 'underscore', './constant
                     data: "mod",
                     render: function (data, type, row, meta) {
                         if (data) {
-                            return C.modules[row["mod"]];
+                            return C.modulesAll[row["mod"]];
                         } else
                             return "-";
                     }

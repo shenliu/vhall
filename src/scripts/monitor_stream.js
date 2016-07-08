@@ -109,10 +109,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 "url": C.url.monitor_stream,
                 "dataSrc": ""
             }
-            ,"order": [[ 13, "desc" ]]
-            //,fixedColumns: {
-            //   leftColumns: 1
-            //}
+            ,"order": [[ 14, "desc" ]]
             ,"columns": [{
                 // 流ID idx: 0
                 data: "streamid",
@@ -147,7 +144,18 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             }, {
-                // SRS接收 idx: 4
+                // 移动发起 idx: 4
+                orderDataType: "dom-error-number",
+                type: "numeric",
+                data: "5.log_list",
+                render: function (data, type, row, meta) {
+                    if (data) {
+                        return _genList(row["5"], row["streamid"], "5", template);
+                    } else
+                        return "-";
+                }
+            }, {
+                // SRS接收 idx: 5
                 orderDataType: "dom-error-number",
                 type: "numeric",
                 data: "2.log_list",
@@ -158,7 +166,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             }, {
-                // SRS分发 idx: 5
+                // SRS分发 idx: 6
                 orderDataType: "dom-error-number",
                 type: "numeric",
                 data: "11.log_list",
@@ -169,7 +177,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             } , {
-                // 多码流转码 idx: 6
+                // 多码流转码 idx: 7
                 orderDataType: "dom-error-number",
                 type: "numeric",
                 data: "16.log_list",
@@ -180,7 +188,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             }, {
-                // HLS切片 idx: 7
+                // HLS切片 idx: 8
                 orderDataType: "dom-error-number",
                 type: "numeric",
                 data: "12.log_list",
@@ -191,7 +199,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             }, {
-                // HLS同步 idx: 8
+                // HLS同步 idx: 9
                 orderDataType: "dom-error-number",
                 type: "numeric",
                 data: "13.log_list",
@@ -202,7 +210,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             }, {
-                // HLS回放 idx: 9
+                // HLS回放 idx: 10
                 orderDataType: "dom-error-number",
                 type: "numeric",
                 data: "14.log_list",
@@ -213,7 +221,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             }, {
-                // 移动 idx: 10
+                // 移动 idx: 11
                 orderDataType: "dom-collect-number",
                 type: "numeric",
                 data: "baduser.mobile_cdn",
@@ -224,7 +232,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             }, {
-                // Flash idx: 11
+                // Flash idx: 12
                 orderDataType: "dom-collect-number",
                 type: "numeric",
                 data: "baduser.flash_cdn",
@@ -235,7 +243,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         return "-";
                 }
             }, {
-                // 卡顿用户数 idx: 12
+                // 卡顿用户数 idx: 13
                 orderDataType: "dom-user-number",
                 type: "numeric",
                 data: "baduser.user",
@@ -244,7 +252,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                     return dom.join("");
                 }
             }, {
-                // 用户总数 idx: 13
+                // 用户总数 idx: 14
                 orderDataType: "dom-user-number",
                 type: "numeric",
                 data: "alluser.user",
@@ -316,8 +324,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                 var id = target.attr("data-id");
                 switch(id) {
                     case "1": // 过滤结束流
-                        table.column(10).order("desc"); // 按<移动>列降序排列
-                        _setFilter(4, "text", 5, "结束");
+                        table.column(11).order("desc"); // 按<移动>列降序排列
+                        _setFilter(5, "text", 5, "结束");
                         _filter(table, true); // 组合查询
                         break;
                     case "2": // 流ID大于10的
@@ -402,12 +410,13 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         }
                         break;
 
-                    case 4: // SRS接收
-                    case 5: // SRS分发
-                    case 6: // 多码流转码
-                    case 7: // HLS切片
-                    case 8: // HLS同步
-                    case 9: // HLS回放
+                    case 4: // 移动发起
+                    case 5: // SRS接收
+                    case 6: // SRS分发
+                    case 7: // 多码流转码
+                    case 8: // HLS切片
+                    case 9: // HLS同步
+                    case 10: // HLS回放
                         if (dimension === "number") {
                             switch(oper) {
                                 case 1: // <=
@@ -448,8 +457,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
                         }
                         break;
 
-                    case 12: // 卡顿用户数
-                    case 13: // 用户总数
+                    case 13: // 卡顿用户数
+                    case 14: // 用户总数
                         if (dimension === "number") {
                             switch(oper) {
                                 case 1: // <=

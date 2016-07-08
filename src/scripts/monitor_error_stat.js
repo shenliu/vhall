@@ -119,7 +119,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     }
 
     /**
-     *  8个饼图
+     *  9个饼图
      */
     function monitor_error_oneday() {
         T.xhr_get(C.url.monitor_error_stat_oneday, function(data, textStatus, jqXHR) {
@@ -225,7 +225,7 @@ require(['jquery', 'semantic', 'underscore',  'echarts', './constant', './tool']
     }
 
     /**
-     * 八个饼状图
+     * 9个饼状图
      * @param dom
      * @param legend
      * @param series
