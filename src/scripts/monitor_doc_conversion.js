@@ -57,9 +57,11 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                     "dataSrc": function(json) {
                         var data = [];
                         $.each(json, function(k, v) {
+                            var ks = k.split("_");
                             var o = {
-                                "id": k.split("_")[0],
+                                "id": ks[0],
                                 "hostname": v["hostname"],
+                                "session": ks[1] + "_" + ks[2],
                                 "232101": v["232101"] || "-",
                                 "232001": v["232001"] || "-",
                                 "232011": v["232011"] || "-",
@@ -72,7 +74,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                         return data;
                     }
                 }
-                ,"order": [[ 6, "desc" ]]
+                ,"order": [[ 7, "desc" ]]
                 ,"columns": [{
                     // ID idx: 0
                     data: "id"
@@ -80,19 +82,22 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                     // hostname idx: 1
                     data: "hostname"
                 }, {
-                    // 232101 转换服务启动 idx: 2
+                    // session ID idx: 2
+                    data: "session"
+                }, {
+                    // 232101 转换服务启动 idx: 3
                     data: "232101"
                 }, {
-                    // 232001 成功收到任务 idx: 3
+                    // 232001 成功收到任务 idx: 4
                     data: "232001"
                 }, {
-                    // 232011 转换任务开始 idx: 4
+                    // 232011 转换任务开始 idx: 5
                     data: "232011"
                 }, {
-                    // 232002 转换任务完成 idx: 5
+                    // 232002 转换任务完成 idx: 6
                     data: "232002"
                 }, {
-                    // 234001 接收任务失败 idx: 6
+                    // 234001 接收任务失败 idx: 7
                     data: "234001",
                     render: function (data, type, row, meta) {
                         if (typeof data == "object") {
@@ -113,7 +118,7 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', './constant', './tool'
                         }
                     }
                 }, {
-                    // 234011 转换任务失败 idx: 7
+                    // 234011 转换任务失败 idx: 8
                     data: "234011",
                     render: function (data, type, row, meta) {
                         if (typeof data == "object") {
