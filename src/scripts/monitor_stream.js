@@ -826,6 +826,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             var domain = that.text().split(":")[0].trim();
             var url, hash;
 
+            domain = domain.replace(/_wap/g, ""); // 去掉所有_wap
+
             if (domain.indexOf("rtmp") !== -1) { // rtmp
                 // 格式: rtmp://domain/vhall/id
                 hash = ["rtmp://", domain, "/vhall/", id];
@@ -833,7 +835,8 @@ require(['jquery', 'semantic', 'dataTable', 'underscore', 'scroll', 'echarts', '
             } else if (domain.indexOf("hls") !== -1) { // hls
                 // 格式: http://cn_domain/vhall/id/livestream.m3u8
                 // 格式: http://cc_domain/vhall/id/index.m3u8
-                var suffix = domain.startsWith("cn") ? "/livestream.m3u8" : "/index.m3u8";
+                // 格式: http://xyhlslivepc/vhall/id/livestream.m3u8
+                var suffix = domain.startsWith("cc") ? "/index.m3u8" : "/livestream.m3u8";
                 hash = ["http://", domain, "/vhall/", id, suffix];
                 url = './player/jwp.html#' + hash.join("");
             } else {
