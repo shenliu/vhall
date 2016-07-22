@@ -79,6 +79,11 @@ require(['jquery', 'semantic', 'dataTable', 'mscroll', 'underscore', './constant
 
             $(".ui.dropdown").dropdown();
 
+            $('.vh-search-id.ui.dropdown')
+                .dropdown({
+                    allowAdditions: true
+                });
+
             // 日期
             var now = new Date(),
                 until = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
